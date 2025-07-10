@@ -1,0 +1,5 @@
+/api/node_modules
+/api/.env
+
+/front/node_modules
+/front/src/environments/environment.development.ts

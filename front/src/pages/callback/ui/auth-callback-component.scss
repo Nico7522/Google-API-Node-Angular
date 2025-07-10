@@ -1,0 +1,63 @@
+.auth-callback-message {
+  padding: 1rem 1.5rem;
+  width: 50%;
+  margin: 150px auto;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+h3 {
+  text-align: center;
+}
+
+.auth-callback-message.error {
+  background: #ffeaea;
+  color: #b71c1c;
+  border: 1px solid #f44336;
+}
+
+.auth-callback-message.success {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #4caf50;
+}
+
+.back-home-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto 24px auto;
+  padding: 10px 24px;
+  background: #512da8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(80, 0, 120, 0.1);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  width: fit-content;
+  gap: 10px;
+}
+
+.back-home-btn:hover {
+  background: #7c43bd;
+  box-shadow: 0 4px 16px rgba(80, 0, 120, 0.18);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.icon-home {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url("https://img.icons8.com/ios-filled/50/ffffff/home.png")
+    no-repeat center center;
+  background-size: 20px 20px;
+  margin-right: 6px;
+}
