@@ -1,23 +1,12 @@
-import {
-  computed,
-  inject,
-  Injectable,
-  linkedSignal,
-  signal,
-} from '@angular/core';
-import { GoogleAuthService } from '../google-auth/google-auth-service';
+import { computed, Injectable, signal } from '@angular/core';
 import { UserInfo } from '../../models/user-model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  #googleAuthService = inject(GoogleAuthService);
-
   #userInfo = signal<UserInfo | null>(this._getUserInfoFromStorage());
-
   userInfo = computed<UserInfo | null>(() => this.#userInfo());
-
   private _getUserInfoFromStorage(): UserInfo | null {
     const userStr = localStorage.getItem('user');
     if (!userStr) return null;
@@ -27,7 +16,6 @@ export class UserService {
       return null;
     }
   }
-
   setUserInfo(user: UserInfo | null): void {
     this.#userInfo.set(user);
     if (user) {

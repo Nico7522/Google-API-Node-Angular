@@ -12,17 +12,17 @@ export class HomeComponent {
   #userService = inject(UserService);
   login() {
     // Trigger request for sign in.
-    this.#googleAuthService.signInWithGoogle.set(true);
-  }
-
-  user = this.#userService.userInfo;
-  constructor() {
-    effect(() => {
-      // When receiving the auth url, redirect to authorize.
-      if (this.#googleAuthService.signIn.value()?.authUrl) {
-        let url = this.#googleAuthService.signIn.value()?.authUrl;
-        window.location.href = url as string;
-      }
+    this.#googleAuthService.signInWithGoogle().subscribe({
+      next(data) {
+        window.location.href = data.authUrl;
+      },
     });
   }
+
+  logout() {
+    this.#googleAuthService
+      .logout(this.#userService.userInfo()?.id || '')
+      .subscribe();
+  }
+  user = this.#userService.userInfo;
 }

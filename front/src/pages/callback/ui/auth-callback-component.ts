@@ -10,14 +10,13 @@ import { RouterModule } from '@angular/router';
 })
 export class AuthCallbackComponent {
   #googleAuthService = inject(GoogleAuthService);
-  error = computed(() => this.#googleAuthService.getAccessToken.error());
-  success = computed(
-    () => this.#googleAuthService.getAccessToken.status() === 'resolved'
-  );
+  /**
+   * The authorization code received from Google.
+   * This code is used to exchange for access tokens.
+   */
   code = input.required<string>();
 
   ngOnInit() {
-    // Trigger request for echange authorization code for access token.
-    this.#googleAuthService.authorizationCode.set(this.code());
+    this.#googleAuthService.getAccessTokens(this.code()).subscribe();
   }
 }

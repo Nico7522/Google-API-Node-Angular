@@ -1,7 +1,7 @@
 <div class="center-container">
     @if (user()) {
-    <button (click)="login()">
-        <img [src]="user()?.picture" alt="Google Logo">
+    <button (click)="logout()">
+        <img class="user" [src]="user()?.picture" alt="Google Logo">
         Se déconnecter
     </button>
     } @else {

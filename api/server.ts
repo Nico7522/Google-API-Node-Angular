@@ -38,7 +38,7 @@ interface TokenData {
 const tokenStorage = new Map<string, TokenData>();
 
 // 1. Endpoint pour initier la connexion
-app.get("/auth/google", (req, res) => {
+app.post("/auth/google", (req, res) => {
   try {
     // Générer l'URL d'autorisation
     const authUrl = oauth2Client.generateAuthUrl({
