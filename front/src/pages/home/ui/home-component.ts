@@ -1,15 +1,19 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { GoogleAuthService } from '../../../shared/api/google-auth/google-auth-service';
-import { UserService } from '../../../shared/api/user/user-service';
+import { UserService } from '../../../shared/models/user/user-service';
+import { ErrorService } from '../../../shared/models/error/error-service';
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-home-component',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './home-component.html',
   styleUrl: './home-component.scss',
 })
 export class HomeComponent {
   #googleAuthService = inject(GoogleAuthService);
   #userService = inject(UserService);
+  #errorService = inject(ErrorService);
+  error = this.#errorService.error;
   login() {
     // Trigger request for sign in.
     this.#googleAuthService.signInWithGoogle().subscribe({

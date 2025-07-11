@@ -11,4 +11,9 @@ export const routes: Routes = [
     path: 'auth/callback',
     component: AuthCallbackComponent,
   },
+  {
+    path: 'mails',
+    loadComponent: () =>
+      import('../pages/mails/ui/mails-component').then((m) => m.MailsComponent),
+  },
 ];

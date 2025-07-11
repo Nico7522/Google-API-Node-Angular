@@ -1,0 +1,10 @@
+<div class="mail-container">
+    <div class="mail-header">
+        <div class="mail-subject">{{ mail().subject }}</div>
+        <div class="mail-date">{{ mail().date | date:'medium' }}</div>
+    </div>
+    <div class="mail-sender">
+        <span class="mail-sender-name">{{ mail().from }}</span>
+    </div>
+
+</div>

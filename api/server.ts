@@ -4,7 +4,22 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+function getMailBody(messageDetail: any): string {
+  const payload = messageDetail.payload;
+  // If multipart, look for 'text/plain' part
+  if (payload.parts) {
+    for (const part of payload.parts) {
+      if (part.mimeType === "text/plain" && part.body && part.body.data) {
+        return Buffer.from(part.body.data, "base64").toString("utf-8");
+      }
+    }
+  }
+  // If not multipart, check payload.body.data
+  if (payload.body && payload.body.data) {
+    return Buffer.from(payload.body.data, "base64").toString("utf-8");
+  }
+  return "";
+}
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -104,6 +119,7 @@ app.get("/auth/google/callback", async (req, res) => {
 app.get("/api/gmail/messages/:userId", async (req, res) => {
   const { userId } = req.params;
   const tokens = tokenStorage.get(userId);
+  console.log(tokenStorage);
 
   if (!tokens) {
     return res.status(401).json({ error: "Utilisateur non authentifié" });
@@ -121,10 +137,46 @@ app.get("/api/gmail/messages/:userId", async (req, res) => {
       userId: "me",
       maxResults: 10,
     });
+    let messages = [];
+    if (response.data.messages) {
+      for (const message of response.data.messages) {
+        if (message.id) {
+          const messageDetail = await gmail.users.messages.get({
+            userId: "me",
+            id: message.id,
+          });
+          let body = getMailBody(messageDetail.data);
+          messages.push({
+            id: messageDetail.data.id,
+            subject:
+              messageDetail.data.payload && messageDetail.data.payload.headers
+                ? messageDetail.data.payload.headers.find(
+                    (h) => h.name === "Subject"
+                  )?.value ?? ""
+                : "",
+            from:
+              messageDetail.data.payload && messageDetail.data.payload.headers
+                ? messageDetail.data.payload.headers.find(
+                    (h) => h.name === "From"
+                  )?.value ?? ""
+                : "",
+            threadId: messageDetail.data.threadId,
+            snippet: messageDetail.data.snippet,
+            date:
+              messageDetail.data.payload && messageDetail.data.payload.headers
+                ? messageDetail.data.payload.headers.find(
+                    (h) => h.name === "Date"
+                  )?.value ?? ""
+                : "",
+            body,
+          });
+        }
+      }
+    }
 
     res.json({
-      messages: response.data.messages || [],
-      total: response.data.resultSizeEstimate,
+      messages: messages || [],
+      total: messages.length,
     });
   } catch (error) {
     // Gérer l'expiration du token
