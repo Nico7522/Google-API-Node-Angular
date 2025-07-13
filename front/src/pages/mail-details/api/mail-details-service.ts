@@ -1,4 +1,4 @@
-import { HttpClient, httpResource } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../../shared/models/user/user-service';
@@ -30,20 +30,16 @@ export class MailDetailsService {
       mailId: this.#mailId(),
     }),
     stream: ({ params }) =>
-      this.#httpClient
-        .get<Mail>(
-          `${environment.API_URL}/api/gmail/users/${params.userId}/messages/${params.mailId}`
-        )
-        .pipe(
-          catchError((error) => {
-            this.#errorService.setError({
-              code: error.status,
-              error: 'Something went wrong',
-              message: 'An error occurred while fetching mail details.',
-            });
-            return of(null);
-          })
-        ),
+      this.#httpClient.get<Mail>(`${environment.API_URL}/api/gmail/users/${params.userId}/messages/${params.mailId}`).pipe(
+        catchError(error => {
+          this.#errorService.setError({
+            code: error.status,
+            error: 'Something went wrong',
+            message: 'An error occurred while fetching mail details.',
+          });
+          return of(null);
+        })
+      ),
   });
 
   setMailId(mailId: string) {

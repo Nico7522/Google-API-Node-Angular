@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { GoogleAuthService } from '../../../shared/api/google-auth/google-auth-service';
 import { RouterModule } from '@angular/router';
 import { ErrorService } from '../../../shared/models/error/error-service';
@@ -9,7 +9,7 @@ import { ErrorService } from '../../../shared/models/error/error-service';
   templateUrl: './auth-callback-component.html',
   styleUrl: './auth-callback-component.scss',
 })
-export class AuthCallbackComponent {
+export class AuthCallbackComponent implements OnInit {
   #googleAuthService = inject(GoogleAuthService);
   #errorService = inject(ErrorService);
   /**
@@ -17,7 +17,6 @@ export class AuthCallbackComponent {
    * This code is used to exchange for access tokens.
    */
   code = input.required<string>();
-
   /**
    * Property to access the error state from the ErrorService.
    */

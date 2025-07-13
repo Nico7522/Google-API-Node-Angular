@@ -51,14 +51,14 @@ export interface Error {
 }
 
 export type GetAuthGoogleCallbackParams = {
-/**
- * Code d'autorisation retourné par Google
- */
-code: string;
-/**
- * Erreur éventuelle
- */
-error?: string;
+  /**
+   * Code d'autorisation retourné par Google
+   */
+  code: string;
+  /**
+   * Erreur éventuelle
+   */
+  error?: string;
 };
 
 export type GetAuthGoogleCallback200User = { [key: string]: unknown };
@@ -95,4 +95,3 @@ export type GetAuthStatusUserId200 = {
 export type PostAuthLogoutUserId200 = {
   message?: string;
 };
-
