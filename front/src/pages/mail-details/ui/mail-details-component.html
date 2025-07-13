@@ -1,0 +1,6 @@
+@if (mail()) {
+<app-mail-component [mail]="mail()!" />
+}
+@if (status() === 'loading') {
+<app-loading-component />
+}

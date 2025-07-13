@@ -1,22 +1,25 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { MailsService } from '../api/mails-service';
 import { UserService } from '../../../shared/models/user/user-service';
-import { DatePipe } from '@angular/common';
+import { MailSummaryComponent } from '../../../entities/mail-summary/ui/mail-summary-component/mail-summary-component';
+import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
 
 @Component({
   selector: 'app-mails-component',
-  imports: [DatePipe],
+  imports: [MailSummaryComponent, LoadingComponent],
   templateUrl: './mails-component.html',
   styleUrl: './mails-component.scss',
 })
 export class MailsComponent implements OnInit {
-  #mailsService = inject(MailsService);
+  mailsService = inject(MailsService);
   #userService = inject(UserService);
+  isLoading = computed(() => this.mailsService.mails.status() === 'loading');
+  hasData = computed(() => this.mailsService.mails.status() === 'resolved');
+  hasError = computed(() => this.mailsService.mails.status() === 'error');
 
-  mails = this.#mailsService.mails.value;
+  mails = this.mailsService.mails.value;
+
   ngOnInit() {
-    console.log(this.#userService.userInfo()?.userId);
-    // Initialization logic for the MailsComponent can go here
-    this.#mailsService.userId.set(this.#userService.userInfo()?.userId || '');
+    this.mailsService.setUserId(this.#userService.userInfo()?.userId || '');
   }
 }

@@ -1,26 +1,28 @@
-import { HttpClient, httpResource } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { httpResource } from '@angular/common/http';
+import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { Mail } from '../../../entities/mail/models/interfaces/mail-interface';
+import { MailDetails } from '../models/interfaces/mail-details-interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MailsService {
-  #httpClient = inject(HttpClient);
-
-  userId = signal<string | null>(null);
-  mails = httpResource<Mail[]>(
-    () => ({
-      url: `${environment.API_URL}/api/gmail/messages/${this.userId()}`,
-    }),
+  #userId = signal<string | null>(null);
+  mails = httpResource<MailDetails[]>(
+    () =>
+      this.#userId()
+        ? `${environment.API_URL}/api/gmail/users/${this.#userId()}/messages`
+        : undefined,
     {
       defaultValue: [],
       parse: (value: unknown) => {
-        const response = value as { messages: Mail[]; total: number };
-        return response.messages;
+        const response = value as { messages: MailDetails[]; total: number };
+        return response.messages || [];
       },
     }
   );
+
+  setUserId(userId: string | null) {
+    this.#userId.set(userId);
+  }
 }

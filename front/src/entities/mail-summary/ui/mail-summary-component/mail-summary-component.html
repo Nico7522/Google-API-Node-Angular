@@ -1,7 +1,4 @@
-<button class="back-btn" routerLink="/mails">
-    &#8592; Return
-</button>
-<div class="mail-container">
+<div [routerLink]="['/mails', mail().id]" class="mail-container">
     <div class="mail-header">
         <div class="mail-subject">{{ mail().subject }}</div>
         <div class="mail-date">{{ mail().date | date:'medium' }}</div>
@@ -9,7 +6,5 @@
     <div class="mail-sender">
         <span class="mail-sender-name">{{ mail().from }}</span>
     </div>
-    <div class="mail-body">
-        {{ mail().body }}
-    </div>
+
 </div>

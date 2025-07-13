@@ -1,9 +1,11 @@
-export interface Mail {
+import { MailSummary } from '../../../mail-summary/models/interfaces/mail-summary-interface';
+
+export interface Mail extends MailSummary {
   id: string;
   threadId: string;
   snippet: string;
-  date: string; // Date in RFC 3339 format
-  body: string; // Email body content
-  from: string; // Optional sender email address
-  subject: string; // Optional email subject
+  date: string;
+  body: string;
+  from: string;
+  subject: string;
 }

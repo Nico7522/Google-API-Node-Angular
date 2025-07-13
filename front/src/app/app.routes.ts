@@ -16,4 +16,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('../pages/mails/ui/mails-component').then((m) => m.MailsComponent),
   },
+  {
+    path: 'mails/:mailId',
+    loadComponent: () =>
+      import('../pages/mail-details/ui/mail-details-component').then(
+        (m) => m.MailDetailsComponent
+      ),
+  },
 ];

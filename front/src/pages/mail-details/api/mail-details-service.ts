@@ -1,0 +1,52 @@
+import { HttpClient, httpResource } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { UserService } from '../../../shared/models/user/user-service';
+import { Mail } from '../../../entities/mail/models/interfaces/mail-interface';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { catchError, EMPTY, of } from 'rxjs';
+import { ErrorService } from '../../../shared/models/error/error-service';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MailDetailsService {
+  #httpClient = inject(HttpClient);
+  #errorService = inject(ErrorService);
+  #user = inject(UserService);
+  #mailId = signal<string>('');
+
+  // mailDetails = httpResource<Mail>(() =>
+  //   this.#mailId()
+  //     ? `${environment.API_URL}/api/gmail/users/${
+  //         this.#userId
+  //       }/messages/${this.#mailId()}`
+  //     : undefined
+  // );
+
+  mailDetails = rxResource({
+    params: () => ({
+      userId: this.#user.userInfo()?.userId,
+      mailId: this.#mailId(),
+    }),
+    stream: ({ params }) =>
+      this.#httpClient
+        .get<Mail>(
+          `${environment.API_URL}/api/gmail/users/${params.userId}/messages/${params.mailId}`
+        )
+        .pipe(
+          catchError((error) => {
+            this.#errorService.setError({
+              code: error.status,
+              error: 'Something went wrong',
+              message: 'An error occurred while fetching mail details.',
+            });
+            return of(null);
+          })
+        ),
+  });
+
+  setMailId(mailId: string) {
+    this.#mailId.set(mailId);
+  }
+}

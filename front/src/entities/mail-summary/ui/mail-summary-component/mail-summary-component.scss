@@ -1,0 +1,51 @@
+.mail-container {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(80, 0, 120, 0.08);
+  padding: 20px 24px;
+  margin: 18px auto;
+  max-width: 600px;
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  cursor: pointer;
+}
+
+.mail-container:hover {
+  box-shadow: 0 4px 16px rgba(80, 0, 120, 0.18);
+  border-color: #512da8;
+  transform: translateY(-2px) scale(1.02);
+}
+
+.mail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mail-subject {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #512da8;
+}
+
+.mail-date {
+  font-size: 0.95rem;
+  color: #888;
+}
+
+.mail-sender {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.mail-sender-name {
+  font-weight: 500;
+  margin-right: 6px;
+}
+
+.mail-sender-email {
+  color: #512da8;
+  font-size: 0.95rem;
+}
