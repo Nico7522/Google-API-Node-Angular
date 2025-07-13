@@ -5,6 +5,7 @@ import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { UserService } from '../../models/user/user-service';
 import { ApiResponse } from '../../models/interfaces/api-response-interface';
 import { ErrorService } from '../../models/error/error-service';
+import { rxResource } from '@angular/core/rxjs-interop';
 @Injectable({
   providedIn: 'root',
 })
@@ -66,5 +67,18 @@ export class GoogleAuthService {
         this.#userService.setUserInfo(null);
       })
     );
+  }
+
+  getStatus(userId: string) {
+    return rxResource({
+      params: () => ({ userId: userId }),
+      stream: ({ params }) => {
+        return this.#httpClient.get<{ authenticated: boolean }>(`${environment.API_URL}/auth/status/${params.userId}`).pipe(
+          tap(res => {
+            if (!res.authenticated) this.#userService.setUserInfo(null);
+          })
+        );
+      },
+    });
   }
 }

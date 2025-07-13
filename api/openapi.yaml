@@ -1,565 +1,89 @@
-{
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Gmail & Calendar API",
-    "version": "1.0.0",
-    "description": "API pour intégrer Gmail et Google Calendar avec authentification OAuth2"
-  },
-  "servers": [
-    {
-      "url": "http://localhost:3000",
-      "description": "Serveur de développement"
-    }
-  ],
-  "components": {
-    "securitySchemes": {
-      "GoogleOAuth2": {
-        "type": "oauth2",
-        "flows": {
-          "authorizationCode": {
-            "authorizationUrl": "https://accounts.google.com/o/oauth2/auth",
-            "tokenUrl": "https://oauth2.googleapis.com/token",
-            "scopes": {
-              "openid": "OpenID Connect",
-              "profile": "Profil utilisateur",
-              "email": "Email utilisateur",
-              "https://www.googleapis.com/auth/gmail.readonly": "Lecture Gmail",
-              "https://www.googleapis.com/auth/calendar.readonly": "Lecture Calendar"
-            }
-          }
-        }
-      }
-    },
-    "schemas": {
-      "AuthResponse": {
-        "type": "object",
-        "properties": {
-          "authUrl": {
-            "type": "string",
-            "description": "URL d'autorisation Google"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "TokenData": {
-        "type": "object",
-        "properties": {
-          "access_token": {
-            "type": "string"
-          },
-          "refresh_token": {
-            "type": "string"
-          },
-          "expiry_date": {
-            "type": "number"
-          }
-        }
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "threadId": {
-            "type": "string"
-          },
-          "snippet": {
-            "type": "string"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "from": {
-            "type": "string"
-          },
-          "to": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string"
-          }
-        }
-      },
-      "CalendarEvent": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "summary": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "start": {
-            "type": "object",
-            "properties": {
-              "dateTime": {
-                "type": "string"
-              },
-              "date": {
-                "type": "string"
-              }
-            }
-          },
-          "end": {
-            "type": "object",
-            "properties": {
-              "dateTime": {
-                "type": "string"
-              },
-              "date": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      },
-      "Error": {
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "needsRefresh": {
-            "type": "boolean"
-          }
-        }
-      }
-    }
-  },
-  "paths": {
-    "/auth/google": {
-      "post": {
-        "summary": "Initier l'authentification Google OAuth2",
-        "tags": [
-          "Authentification"
-        ],
-        "responses": {
-          "200": {
-            "description": "URL d'autorisation générée avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur lors de la génération de l'URL",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/google/callback": {
-      "get": {
-        "summary": "Callback après autorisation Google",
-        "tags": [
-          "Authentification"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "code",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "Code d'autorisation retourné par Google"
-          },
-          {
-            "in": "query",
-            "name": "error",
-            "schema": {
-              "type": "string"
-            },
-            "description": "Erreur éventuelle"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Authentification réussie",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "userId": {
-                      "type": "string"
-                    },
-                    "user": {
-                      "type": "object"
-                    },
-                    "tokens": {
-                      "$ref": "#/components/schemas/TokenData"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Erreur dans les paramètres",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur serveur",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/gmail/users/{userId}/messages": {
-      "get": {
-        "summary": "Récupérer les messages Gmail",
-        "tags": [
-          "Gmail"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Messages récupérés avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "messages": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Message"
-                      }
-                    },
-                    "total": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Utilisateur non authentifié",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur serveur",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/gmail/users/{userId}/messages/{messageId}": {
-      "get": {
-        "summary": "Récupérer un message Gmail spécifique",
-        "tags": [
-          "Gmail"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          },
-          {
-            "in": "path",
-            "name": "messageId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID du message"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Message récupéré avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Utilisateur non authentifié",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Message non trouvé",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/calendar/events/{userId}": {
-      "get": {
-        "summary": "Récupérer les événements Google Calendar",
-        "tags": [
-          "Calendar"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Événements récupérés avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "events": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/CalendarEvent"
-                      }
-                    },
-                    "total": {
-                      "type": "number"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Utilisateur non authentifié",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur serveur",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/refresh/{userId}": {
-      "post": {
-        "summary": "Rafraîchir les tokens d'authentification",
-        "tags": [
-          "Authentification"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Tokens rafraîchis avec succès",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "tokens": {
-                      "$ref": "#/components/schemas/TokenData"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Refresh token manquant",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erreur serveur",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/status/{userId}": {
-      "get": {
-        "summary": "Vérifier le statut d'authentification",
-        "tags": [
-          "Authentification"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Statut d'authentification",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "authenticated": {
-                      "type": "boolean"
-                    },
-                    "hasRefreshToken": {
-                      "type": "boolean"
-                    },
-                    "tokenExpired": {
-                      "type": "boolean"
-                    },
-                    "expiryDate": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/auth/logout/{userId}": {
-      "post": {
-        "summary": "Se déconnecter",
-        "tags": [
-          "Authentification"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "description": "ID utilisateur"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Déconnexion réussie",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "tags": []
-}
+openapi: 3.0.0
+info:
+  title: Gmail & Calendar API
+  version: 1.0.0
+  description: API pour intégrer Gmail et Google Calendar avec authentification OAuth2
+servers:
+  - url: http://localhost:3000
+    description: Serveur de développement
+components:
+  securitySchemes:
+    GoogleOAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://accounts.google.com/o/oauth2/auth
+          tokenUrl: https://oauth2.googleapis.com/token
+          scopes:
+            openid: OpenID Connect
+            profile: Profil utilisateur
+            email: Email utilisateur
+            https://www.googleapis.com/auth/gmail.readonly: Lecture Gmail
+            https://www.googleapis.com/auth/calendar.readonly: Lecture Calendar
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        authUrl:
+          type: string
+          description: URL d'autorisation Google
+        message:
+          type: string
+    TokenData:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expiry_date:
+          type: number
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        threadId:
+          type: string
+        snippet:
+          type: string
+        subject:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        date:
+          type: string
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        start:
+          type: object
+          properties:
+            dateTime:
+              type: string
+            date:
+              type: string
+        end:
+          type: object
+          properties:
+            dateTime:
+              type: string
+            date:
+              type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        needsRefresh:
+          type: boolean
+paths: {}
+tags: []
