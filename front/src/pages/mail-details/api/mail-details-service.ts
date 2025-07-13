@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { UserService } from '../../../shared/models/user/user-service';
 import { Mail } from '../../../entities/mail/models/interfaces/mail-interface';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, EMPTY, of } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { ErrorService } from '../../../shared/models/error/error-service';
 
 @Injectable({

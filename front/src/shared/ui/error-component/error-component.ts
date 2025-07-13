@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ErrorService } from '../../models/error/error-service';
 
@@ -11,10 +11,4 @@ import { ErrorService } from '../../models/error/error-service';
 export class ErrorComponent {
   #errorService = inject(ErrorService);
   error = this.#errorService.error;
-
-  constructor() {
-    effect(() => {
-      console.error('Error:', this.error());
-    });
-  }
 }
