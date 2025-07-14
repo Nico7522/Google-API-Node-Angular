@@ -12,12 +12,15 @@ export const getCalendarEvents = async (req: Request, res: Response) => {
   try {
     oauth2Client.setCredentials(tokens);
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+    const holidayCalendarId = "en.be#holiday@group.v.calendar.google.com";
+
     const response = await calendar.events.list({
       calendarId: "primary",
       timeMin: new Date().toISOString(),
       maxResults: 10,
       singleEvents: true,
       orderBy: "startTime",
+      eventTypes: ["birthday", "fromGmail", "default"],
     });
     res.json({
       events: response.data.items || [],
@@ -30,6 +33,8 @@ export const getCalendarEvents = async (req: Request, res: Response) => {
         needsRefresh: true,
       });
     }
+    console.log("Erreur lors de la récupération des événements:", error);
+
     res
       .status(500)
       .json({ error: "Erreur lors de la récupération des événements" });

@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { MailsService } from '../../api/mails-service';
+import { MailsService } from '../../../pages/mails/api/mails-service';
 
 @Injectable({
   providedIn: 'root',

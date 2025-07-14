@@ -13,14 +13,14 @@ export const routes: Routes = [
   },
   {
     path: 'mails',
-    loadComponent: () =>
-      import('../pages/mails/ui/mails-component').then((m) => m.MailsComponent),
+    loadComponent: () => import('../pages/mails/ui/mails-component').then(m => m.MailsComponent),
   },
   {
     path: 'mails/:mailId',
-    loadComponent: () =>
-      import('../pages/mail-details/ui/mail-details-component').then(
-        (m) => m.MailDetailsComponent
-      ),
+    loadComponent: () => import('../pages/mail-details/ui/mail-details-component').then(m => m.MailDetailsComponent),
+  },
+  {
+    path: 'agenda',
+    loadComponent: () => import('../pages/agenda/ui/agenda-component').then(m => m.AgendaComponent),
   },
 ];
