@@ -28,5 +28,6 @@ export function mailToMailSummaryDTO(
     to: payload?.headers?.find((h) => h.name === "To")?.value ?? "",
     subject: payload?.headers?.find((h) => h.name === "Subject")?.value ?? "",
     date: payload?.headers?.find((h) => h.name === "Date")?.value ?? "",
+    read: messageDetail.labelIds?.includes("UNREAD") ? false : true,
   };
 }

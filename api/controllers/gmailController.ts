@@ -25,6 +25,7 @@ export const getMessages = async (req: Request, res: Response) => {
             userId: "me",
             id: message.id,
           });
+
           messages.push(mailToMailSummaryDTO(messageDetail.data));
         }
       }

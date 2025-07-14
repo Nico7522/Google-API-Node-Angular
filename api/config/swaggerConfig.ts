@@ -77,6 +77,9 @@ const options = {
             snippet: {
               type: "string",
             },
+            read: {
+              type: "boolean",
+            },
             subject: {
               type: "string",
             },

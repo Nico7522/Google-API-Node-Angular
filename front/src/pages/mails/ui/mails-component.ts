@@ -1,8 +1,9 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MailsService } from '../api/mails-service';
 import { UserService } from '../../../shared/models/user/user-service';
 import { MailSummaryComponent } from '../../../entities/mail-summary/ui/mail-summary-component/mail-summary-component';
 import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
+import { MailsFilterService } from '../models/mails-filter/mails-filter-service';
 
 @Component({
   selector: 'app-mails-component',
@@ -12,11 +13,16 @@ import { LoadingComponent } from '../../../shared/ui/loading-component/loading-c
 })
 export class MailsComponent implements OnInit {
   #mailsService = inject(MailsService);
+  #mailsFilterService = inject(MailsFilterService);
   #userService = inject(UserService);
   isLoading = computed(() => this.#mailsService.mails.isLoading());
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   hasError = computed(() => this.#mailsService.mails.status() === 'error');
-  mails = this.#mailsService.mails.value;
+  filteredMails = this.#mailsFilterService.filteredMails;
+  unreadOnly = this.#mailsFilterService.unreadOnly;
+  onToggleUnread() {
+    this.#mailsFilterService.toggleUnreadOnly();
+  }
 
   refreshMails() {
     this.#mailsService.mails.reload();

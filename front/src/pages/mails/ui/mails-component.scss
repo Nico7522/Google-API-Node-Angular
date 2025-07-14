@@ -58,6 +58,12 @@
   box-shadow: 0 2px 8px rgba(80, 0, 120, 0.08);
   padding: 20px 24px;
   border: 1px solid #e0e0e0;
+
+  /* Ajout d'un groupe de boutons à droite */
+  .btn-group {
+    display: flex;
+    gap: 10px;
+  }
 }
 
 .mails-header h2 {

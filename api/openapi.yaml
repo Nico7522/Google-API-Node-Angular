@@ -47,6 +47,8 @@ components:
           type: string
         snippet:
           type: string
+        read:
+          type: boolean
         subject:
           type: string
         from:

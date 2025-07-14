@@ -1,14 +1,30 @@
 <div class="mails-container">
     <div class="mails-header">
         <h2>My Emails</h2>
-        <button class="refresh-btn" (click)="refreshMails()" [disabled]="isLoading()">
-            <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
-            Refresh
-        </button>
+        <div class="btn-group">
+            <button class="refresh-btn" (click)="refreshMails()" [disabled]="isLoading()">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
+                Refresh
+            </button>
+            @if (unreadOnly()) {
+            <button class="refresh-btn" (click)="onToggleUnread()" [disabled]="isLoading()">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/visible.png" alt="Toggle read/unread"
+                    class="refresh-icon">
+                All
+            </button>
+            }
+            @else {
+            <button class="refresh-btn" (click)="onToggleUnread()" [disabled]="isLoading()">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/closed-eye.png" alt="Toggle read/unread"
+                    class="refresh-icon">
+                Only Unread
+            </button>
+            }
+        </div>
     </div>
 
     @if (hasData()) {
-    @for (mail of mails(); track $index) {
+    @for (mail of filteredMails(); track $index) {
     <app-mail-summary-component [mail]="mail" />
     }
     }

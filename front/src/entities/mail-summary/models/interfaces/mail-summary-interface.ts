@@ -3,4 +3,5 @@ export interface MailSummary {
   date: string;
   from: string;
   subject: string;
+  read: boolean;
 }
