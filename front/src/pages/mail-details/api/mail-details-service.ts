@@ -11,22 +11,14 @@ import { ErrorService } from '../../../shared/models/error/error-service';
   providedIn: 'root',
 })
 export class MailDetailsService {
-  #httpClient = inject(HttpClient);
-  #errorService = inject(ErrorService);
-  #user = inject(UserService);
+  readonly #httpClient = inject(HttpClient);
+  readonly #errorService = inject(ErrorService);
+  readonly #userService = inject(UserService);
   #mailId = signal<string>('');
-
-  // mailDetails = httpResource<Mail>(() =>
-  //   this.#mailId()
-  //     ? `${environment.API_URL}/api/gmail/users/${
-  //         this.#userId
-  //       }/messages/${this.#mailId()}`
-  //     : undefined
-  // );
 
   mailDetails = rxResource({
     params: () => ({
-      userId: this.#user.userInfo()?.userId,
+      userId: this.#userService.userInfo()?.userId,
       mailId: this.#mailId(),
     }),
     stream: ({ params }) =>

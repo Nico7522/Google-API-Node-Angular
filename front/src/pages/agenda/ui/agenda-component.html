@@ -1,3 +1,10 @@
-<h3>Here Agenda
-
-</h3>
+<main>
+    @if (hasData()) {
+    @for (event of events(); track event.id) {
+    <app-calendar-event-component [event]="event" />
+    }
+    }
+    @if (isLoading()) {
+    <app-loading-component />
+    }
+</main>

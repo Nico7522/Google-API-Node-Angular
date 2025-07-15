@@ -1,17 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { AgendaService } from '../api/agenda-service';
-import { UserService } from '../../../shared/models/user/user-service';
+import { CalendarEventComponent } from '../../../entities/calendar-event/ui/calendar-event-component/calendar-event-component';
+import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
 
 @Component({
   selector: 'app-agenda-component',
-  imports: [],
+  imports: [CalendarEventComponent, LoadingComponent],
   templateUrl: './agenda-component.html',
   styleUrl: './agenda-component.scss',
 })
-export class AgendaComponent implements OnInit {
+export class AgendaComponent {
   #agendaService = inject(AgendaService);
-  #userService = inject(UserService);
-  ngOnInit(): void {
-    this.#agendaService.setUserId(this.#userService.userInfo()?.userId ?? '');
-  }
+  isLoading = computed(() => this.#agendaService.canlendar.isLoading());
+  hasData = computed(() => this.#agendaService.canlendar.status() === 'resolved');
+  events = this.#agendaService.canlendar.value;
 }

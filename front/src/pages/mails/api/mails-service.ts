@@ -1,22 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { catchError, of, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MailSummary } from '../../../entities/mail-summary/models/interfaces/mail-summary-interface';
 import { ErrorService } from '../../../shared/models/error/error-service';
+import { UserService } from '../../../shared/models/user/user-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MailsService {
-  #httpClient = inject(HttpClient);
-  #errorService = inject(ErrorService);
-  #userId = signal<string | null>(null);
+  readonly #httpClient = inject(HttpClient);
+  readonly #errorService = inject(ErrorService);
+  readonly #userService = inject(UserService);
 
-  mails = rxResource<MailSummary[], { userId: string | null }>({
+  mails = rxResource({
     params: () => ({
-      userId: this.#userId(),
+      userId: this.#userService.userInfo()?.userId,
     }),
     stream: ({ params }) => {
       if (!params.userId) {
@@ -37,8 +38,4 @@ export class MailsService {
         );
     },
   });
-
-  setUserId(userId: string | null) {
-    this.#userId.set(userId);
-  }
 }

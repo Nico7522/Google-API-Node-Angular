@@ -1,4 +1,4 @@
-import { gmail_v1 } from "googleapis";
+import { calendar_v3, gmail_v1 } from "googleapis";
 import { getMailBody } from "./get-mail-body";
 import { MailDTO, MailSumarryDTO } from "../interfaces/mail-interfaces";
 
@@ -29,5 +29,14 @@ export function mailToMailSummaryDTO(
     subject: payload?.headers?.find((h) => h.name === "Subject")?.value ?? "",
     date: payload?.headers?.find((h) => h.name === "Date")?.value ?? "",
     read: messageDetail.labelIds?.includes("UNREAD") ? false : true,
+  };
+}
+
+export function eventToEventDTO(event: calendar_v3.Schema$Event) {
+  return {
+    id: event.id,
+    startAt: event.start?.date,
+    summary: event.summary,
+    description: event.description,
   };
 }

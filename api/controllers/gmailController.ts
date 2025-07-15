@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { google } from "googleapis";
-import { tokenStorage } from "./authController";
 import { oauth2Client } from "../config/googleConfig";
 import { mailToMailSummaryDTO, mailToMailDTO } from "../helpers/mappers";
+import { getTokens, setToken, removeToken } from "../helpers/tokenStorage";
 
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const tokens = tokenStorage.get(userId);
+  const tokens = getTokens()[userId];
   if (!tokens) {
     return res.status(401).json({ error: "Utilisateur non authentifié" });
   }
@@ -49,7 +49,7 @@ export const getMessages = async (req: Request, res: Response) => {
 
 export const getMessageById = async (req: Request, res: Response) => {
   const { userId, messageId } = req.params;
-  const tokens = tokenStorage.get(userId);
+  const tokens = getTokens()[userId];
   if (!tokens) {
     return res.status(401).json({ error: "Utilisateur non authentifié" });
   }

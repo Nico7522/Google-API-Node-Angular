@@ -1,8 +1,6 @@
 import { oauth2Client, SCOPES } from "../config/googleConfig";
 import { Request, Response } from "express";
-
-// Temporary token storage (should be replaced with DB in production)
-const tokenStorage = new Map<string, any>();
+import { getTokens, setToken, removeToken } from "../helpers/tokenStorage";
 
 export const handleGoogleAuth = (req: Request, res: Response) => {
   try {
@@ -32,7 +30,7 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
   try {
     const { tokens } = await oauth2Client.getToken(code as string);
     const userId = "user_" + Date.now();
-    tokenStorage.set(userId, tokens);
+    setToken(userId, tokens);
     oauth2Client.setCredentials(tokens);
     const oauth2 = require("googleapis").google.oauth2({
       version: "v2",
@@ -56,7 +54,7 @@ export const handleGoogleCallback = async (req: Request, res: Response) => {
 
 export const handleRefreshToken = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const tokens = tokenStorage.get(userId);
+  const tokens = getTokens()[userId];
   if (!tokens || !tokens.refresh_token) {
     return res.status(401).json({ error: "Refresh token manquant" });
   }
@@ -64,7 +62,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
     oauth2Client.setCredentials({ refresh_token: tokens.refresh_token });
     const { credentials } = await oauth2Client.refreshAccessToken();
     const updatedTokens = { ...tokens, ...credentials };
-    tokenStorage.set(userId, updatedTokens);
+    setToken(userId, updatedTokens);
     res.json({
       message: "Tokens rafraîchis avec succès",
       tokens: {
@@ -82,7 +80,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 export const handleAuthStatus = (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  const tokens = tokenStorage.get(userId);
+  const tokens = getTokens()[userId];
   if (!tokens) {
     return res.json({ authenticated: false });
   }
@@ -99,20 +97,17 @@ export const handleAuthStatus = (req: Request, res: Response) => {
 
 export const handleLogout = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const tokens = tokenStorage.get(userId);
+  const tokens = getTokens()[userId];
   if (tokens) {
     try {
       await oauth2Client.revokeToken(tokens.access_token);
-      tokenStorage.delete(userId);
+      removeToken(userId);
       res.json({ message: "Déconnexion réussie" });
     } catch (error) {
-      tokenStorage.delete(userId);
+      removeToken(userId);
       res.json({ message: "Déconnexion effectuée (erreur révocation token)" });
     }
   } else {
     res.json({ message: "Utilisateur déjà déconnecté" });
   }
 };
-
-// Export tokenStorage for use in other controllers
-export { tokenStorage };

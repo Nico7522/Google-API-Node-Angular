@@ -1,0 +1,12 @@
+<div class="calendar-event-card">
+    <div class="calendar-event-header">
+        <h3 class="calendar-event-title">{{ event().summary }}</h3>
+        <span class="calendar-event-date">{{ event().startAt | date: 'medium' }}</span>
+    </div>
+    <div class="calendar-event-body">
+        <p class="calendar-event-description">{{ event().description }}</p>
+    </div>
+    <div class="calendar-event-footer">
+        <span class="calendar-event-id">#{{ event().id }}</span>
+    </div>
+</div>
