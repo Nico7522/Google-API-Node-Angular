@@ -1,13 +1,10 @@
 <div class="mails-container">
-    <div class="mails-header">
-        <h2>My Emails</h2>
-        <div class="btn-group">
-            <button class="refresh-btn" (click)="refreshMails()" [disabled]="isLoading()">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
-                Refresh
-            </button>
-            <app-mails-filter />
-        </div>
+    <div class="btn-group">
+        <button class="refresh-btn" (click)="refreshMails()" [disabled]="isLoading()">
+            <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
+            Refresh
+        </button>
+        <app-mails-filter />
     </div>
 
     @if (hasData()) {

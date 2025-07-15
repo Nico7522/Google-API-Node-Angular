@@ -4,9 +4,12 @@
   box-shadow: 0 2px 8px rgba(80, 0, 120, 0.08);
   padding: 20px 24px;
   margin: 18px auto;
-  max-width: 600px;
+  // max-width: 600px;
   border: 1px solid #e0e0e0;
-  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s,
+    border-color 0.2s;
   cursor: pointer;
 }
 
