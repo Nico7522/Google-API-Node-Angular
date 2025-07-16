@@ -1,3 +1,5 @@
+@use 'theme';
+
 .center-container {
   display: flex;
   flex-direction: column;
@@ -24,7 +26,7 @@
   border-radius: 18px;
   box-shadow: 0 2px 12px rgba(80, 0, 120, 0.1);
   text-decoration: none;
-  color: #512da8;
+  color: theme.$primary-color;
   font-size: 1.15rem;
   font-weight: 700;
   transition:
@@ -64,7 +66,7 @@
 
 .login-btn {
   background: #fff;
-  color: #512da8;
+  color: theme.$primary-color;
   border: none;
   border-radius: 6px;
   font-size: 16px;

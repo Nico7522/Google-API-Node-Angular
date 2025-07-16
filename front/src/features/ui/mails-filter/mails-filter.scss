@@ -1,3 +1,4 @@
+@use 'theme';
 .mails-filter-container {
   display: flex;
   align-items: center;
@@ -20,12 +21,12 @@
 }
 
 .mails-filter-input:focus {
-  border: 1.5px solid #512da8;
+  border: 1.5px solid theme.$primary-color;
 }
 
 .mails-filter-btn {
   padding: 8px 16px;
-  background: #512da8;
+  background: theme.$primary-button-color;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -91,7 +92,7 @@
 }
 
 .switch input:checked + .slider {
-  background: #512da8;
+  background: theme.$primary-color;
 }
 
 .switch input:checked + .slider:before {
