@@ -8,7 +8,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/calendar/events/{userId}:
+ * /api/calendar/users/{userId}/events:
  *   get:
  *     summary: Récupérer les événements Google Calendar
  *     tags:
@@ -32,8 +32,6 @@ const router = Router();
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/CalendarEvent'
- *                 total:
- *                   type: number
  *       401:
  *         description: Utilisateur non authentifié
  *         content:
@@ -51,7 +49,7 @@ router.get("/users/:userId/events", getCalendarEvents);
 
 /**
  * @swagger
- * /api/calendar/events/belgium-holidays/{userId}:
+ * /api/calendar/users/{userId}events/holidays:
  *   get:
  *     summary: Récupérer les jours fériés belges
  *     description: Récupère la liste des jours fériés officiels en Belgique
@@ -75,22 +73,7 @@ router.get("/users/:userId/events", getCalendarEvents);
  *                 events:
  *                   type: array
  *                   items:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: string
- *                         description: Identifiant unique de l'événement
- *                       startAt:
- *                         type: string
- *                         format: date
- *                         description: Date de début de l'événement
- *                       summary:
- *                         type: string
- *                         description: Résumé/titre de l'événement
- *                       description:
- *                         type: string
- *                         description: Description de l'événement
- *                         nullable: true
+ *                     $ref: '#/components/schemas/CalendarEvent'
  *       401:
  *         description: Utilisateur non authentifié
  *         content:

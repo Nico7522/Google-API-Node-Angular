@@ -1,6 +1,7 @@
 import { calendar_v3, gmail_v1 } from "googleapis";
 import { getMailBody } from "./get-mail-body";
 import { MailDTO, MailSumarryDTO } from "../interfaces/mail-interfaces";
+import { EventDTO } from "../interfaces/event-interface";
 
 export function mailToMailDTO(messageDetail: gmail_v1.Schema$Message): MailDTO {
   const payload = messageDetail.payload;
@@ -32,11 +33,11 @@ export function mailToMailSummaryDTO(
   };
 }
 
-export function eventToEventDTO(event: calendar_v3.Schema$Event) {
+export function eventToEventDTO(event: calendar_v3.Schema$Event): EventDTO {
   return {
-    id: event.id,
-    startAt: event.start?.date,
-    summary: event.summary,
-    description: event.description,
+    id: event.id ?? "",
+    startAt: event.start?.date ?? "",
+    summary: event.summary ?? "",
+    description: event.description ?? "",
   };
 }

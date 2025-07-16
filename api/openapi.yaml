@@ -66,20 +66,12 @@ components:
           type: string
         description:
           type: string
-        start:
-          type: object
-          properties:
-            dateTime:
-              type: string
-            date:
-              type: string
-        end:
-          type: object
-          properties:
-            dateTime:
-              type: string
-            date:
-              type: string
+        startAt:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
     Error:
       type: object
       properties:
@@ -237,7 +229,7 @@ paths:
                 properties:
                   message:
                     type: string
-  /api/calendar/events/{userId}:
+  /api/calendar/users/{userId}/events:
     get:
       summary: Récupérer les événements Google Calendar
       tags:
@@ -261,8 +253,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/CalendarEvent'
-                  total:
-                    type: number
         '401':
           description: Utilisateur non authentifié
           content:
@@ -275,7 +265,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/calendar/events/belgium-holidays/{userId}:
+  /api/calendar/users/{userId}events/holidays:
     get:
       summary: Récupérer les jours fériés belges
       description: Récupère la liste des jours fériés officiels en Belgique
@@ -299,22 +289,7 @@ paths:
                   events:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: Identifiant unique de l'événement
-                        startAt:
-                          type: string
-                          format: date
-                          description: Date de début de l'événement
-                        summary:
-                          type: string
-                          description: Résumé/titre de l'événement
-                        description:
-                          type: string
-                          description: Description de l'événement
-                          nullable: true
+                      $ref: '#/components/schemas/CalendarEvent'
         '401':
           description: Utilisateur non authentifié
           content:
