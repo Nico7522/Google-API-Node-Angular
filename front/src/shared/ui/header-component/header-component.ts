@@ -1,39 +1,35 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header-component',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './header-component.html',
   styleUrl: './header-component.scss',
 })
 export class HeaderComponent {
   readonly #router = inject(Router);
-  #title = signal('');
+  readonly #navigationEnd = toSignal(this.#router.events.pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd)), {
+    initialValue: new NavigationEnd(0, this.#router.url, this.#router.url),
+  });
+  title = computed(() => (this.#navigationEnd().url === '/' ? 'Home' : this.#getPageTitle(this.#navigationEnd().url)));
 
-  // Map route paths to titles
-  #routeTitleMap: Record<string, string> = {
-    '': 'HOME',
-    agenda: 'AGENDA',
-    mails: 'MAILS',
-    'mails/:mailId': 'MAIL DETAILS',
-    'auth/callback': 'AUTH CALLBACK',
-  };
+  #getPageTitle(url: string) {
+    let title = '';
+    switch (url) {
+      case '/mails':
+        title = 'Mails';
+        break;
+      case '/agenda':
+        title = 'Agenda';
+        break;
+      default:
+        title = 'Mails';
+        break;
+    }
 
-  constructor() {
-    this.#router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        const url = event.urlAfterRedirects.split('?')[0].replace(/^\//, '');
-        // Find the best match for the route
-        let title = this.#routeTitleMap[url] || '';
-        // Handle dynamic routes like mails/:mailId
-        if (!title && url.startsWith('mails/')) {
-          title = this.#routeTitleMap['mails/:mailId'];
-        }
-        this.#title.set(title || '');
-      }
-    });
+    return title;
   }
-
-  title = computed(() => this.#title());
 }

@@ -10,7 +10,7 @@ import { LoadingComponent } from '../../../shared/ui/loading-component/loading-c
   styleUrl: './agenda-component.scss',
 })
 export class AgendaComponent {
-  #agendaService = inject(AgendaService);
+  readonly #agendaService = inject(AgendaService);
   isLoading = computed(() => this.#agendaService.canlendar.isLoading());
   hasData = computed(() => this.#agendaService.canlendar.status() === 'resolved');
   events = this.#agendaService.canlendar.value;

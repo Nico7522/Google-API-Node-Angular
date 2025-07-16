@@ -2,4 +2,4 @@
 
 ### TODO :
 
-- Améliorer la gestion du changement de titre dans le header
+- Ajouter un boutton pour supprimer le message d'erreur

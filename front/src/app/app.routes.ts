@@ -6,21 +6,26 @@ export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
+    title: 'Home',
   },
   {
     path: 'auth/callback',
     component: AuthCallbackComponent,
+    title: 'Authentication Callback',
   },
   {
     path: 'mails',
     loadComponent: () => import('../pages/mails/ui/mails-component').then(m => m.MailsComponent),
+    title: 'Mails',
   },
   {
     path: 'mails/:mailId',
     loadComponent: () => import('../pages/mail-details/ui/mail-details-component').then(m => m.MailDetailsComponent),
+    title: 'Mail Details',
   },
   {
     path: 'agenda',
     loadComponent: () => import('../pages/agenda/ui/agenda-component').then(m => m.AgendaComponent),
+    title: 'Agenda',
   },
 ];

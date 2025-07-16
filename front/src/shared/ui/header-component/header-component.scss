@@ -5,8 +5,42 @@
   box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  gap: 1.5rem;
+}
+
+.home-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #512da8;
+  color: #f3f0fa;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 4px rgba(80, 0, 120, 0.06);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    color 0.2s;
+  cursor: pointer;
+}
+
+.home-btn:hover,
+.home-btn:focus {
+  background: #e9e3f7;
+  color: #7c43bd;
+  box-shadow: 0 2px 8px rgba(80, 0, 120, 0.12);
+  text-decoration: none;
+}
+
+.home-icon {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
 }
 
 .header-title {
@@ -22,8 +56,16 @@
   .app-header {
     padding: 1rem 1rem;
     max-width: 98vw;
+    gap: 0.7rem;
   }
   .header-title {
     font-size: 1.3rem;
+  }
+  .home-btn {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.7rem;
+  }
+  .home-icon {
+    font-size: 1.1rem;
   }
 }
