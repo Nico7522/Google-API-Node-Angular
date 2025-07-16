@@ -66,12 +66,20 @@ components:
           type: string
         description:
           type: string
-        startAt:
-          type: string
-        summary:
-          type: string
-        description:
-          type: string
+        start:
+          type: object
+          properties:
+            dateTime:
+              type: string
+            date:
+              type: string
+        end:
+          type: object
+          properties:
+            dateTime:
+              type: string
+            date:
+              type: string
     Error:
       type: object
       properties:

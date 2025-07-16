@@ -11,4 +11,8 @@ import { ErrorService } from '../../models/error/error-service';
 export class ErrorComponent {
   #errorService = inject(ErrorService);
   error = this.#errorService.error;
+
+  close() {
+    this.#errorService.setError(null);
+  }
 }

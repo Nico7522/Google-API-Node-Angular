@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthCallbackComponent } from '../pages/callback/ui/auth-callback-component';
 import { HomeComponent } from '../pages/home/ui/home-component';
-import { authGuardGuard } from '../shared/guards/auth-guard-guard';
+import { authGuard } from '../shared/guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -18,18 +18,18 @@ export const routes: Routes = [
     path: 'mails',
     loadComponent: () => import('../pages/mails/ui/mails-component').then(m => m.MailsComponent),
     title: 'Mails',
-    canActivate: [authGuardGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'mails/:mailId',
     loadComponent: () => import('../pages/mail-details/ui/mail-details-component').then(m => m.MailDetailsComponent),
     title: 'Mail Details',
-    canActivate: [authGuardGuard],
+    canActivate: [authGuard],
   },
   {
     path: 'agenda',
     loadComponent: () => import('../pages/agenda/ui/agenda-component').then(m => m.AgendaComponent),
     title: 'Agenda',
-    canActivate: [authGuardGuard],
+    canActivate: [authGuard],
   },
 ];

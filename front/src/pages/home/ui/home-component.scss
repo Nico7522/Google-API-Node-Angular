@@ -116,6 +116,30 @@
   padding: 2px;
 }
 
+.inline-loader {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.inline-loader .loader-overlay {
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+  box-shadow: none;
+  display: inline-block;
+  align-items: center;
+  justify-content: center;
+}
+
+.inline-loader .loader-spinner {
+  width: 18px;
+  height: 18px;
+  border-width: 3px;
+  box-shadow: none;
+}
+
 @media (max-width: 700px) {
   .cards-container {
     flex-direction: column;

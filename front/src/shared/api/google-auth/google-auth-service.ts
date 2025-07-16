@@ -10,9 +10,9 @@ import { rxResource } from '@angular/core/rxjs-interop';
   providedIn: 'root',
 })
 export class GoogleAuthService {
-  #httpClient = inject(HttpClient);
-  #userService = inject(UserService);
-  #errorService = inject(ErrorService);
+  readonly #httpClient = inject(HttpClient);
+  readonly #userService = inject(UserService);
+  readonly #errorService = inject(ErrorService);
   /**
    * Sign in with Google.
    * This method triggers a request to the backend to get the Google authentication URL.
@@ -48,7 +48,7 @@ export class GoogleAuthService {
       catchError(error => {
         this.#errorService.setError({
           code: error.status,
-          error: 'Semething went wrong',
+          error: 'Access Token recovery error.',
           message: 'An error occurred while retrieving access tokens.',
         });
         return EMPTY;
@@ -59,16 +59,25 @@ export class GoogleAuthService {
   /**
    * This method sends a request to the backend to log out the user.
    * @param userId The ID of the user to log out.
-   * @returns
+   * @returns a observable with the logout state information
    */
-  logout(userId: string) {
-    return this.#httpClient.post(`${environment.API_URL}/auth/logout/${userId}`, {}).pipe(
+  logout(userId: string): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(`${environment.API_URL}/auth/logout/${userId}`, {}).pipe(
       tap(() => {
         this.#userService.setUserInfo(null);
+      }),
+      catchError(() => {
+        this.#userService.setUserInfo(null);
+        return EMPTY;
       })
     );
   }
 
+  /**
+   * This method get the current user status form the API.
+   * @param userId
+   * @returns a resource ref containing a boolean indicating if the user is authenticated.
+   */
   getStatus(userId: string) {
     return rxResource({
       params: () => ({ userId: userId }),
@@ -76,6 +85,14 @@ export class GoogleAuthService {
         return this.#httpClient.get<{ authenticated: boolean }>(`${environment.API_URL}/auth/status/${params.userId}`).pipe(
           tap(res => {
             if (!res.authenticated) this.#userService.setUserInfo(null);
+          }),
+          catchError(error => {
+            this.#errorService.setError({
+              code: error.status,
+              error: "Can't get status.",
+              message: 'Unable to get the current user status.',
+            });
+            return EMPTY;
           })
         );
       },

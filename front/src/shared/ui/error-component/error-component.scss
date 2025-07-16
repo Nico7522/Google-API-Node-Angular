@@ -24,3 +24,16 @@
 .error-message {
   flex: 1;
 }
+
+.close-btn {
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #b71c1c;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}

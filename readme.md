@@ -38,7 +38,6 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 ### Général
 
 - [ ] Mode sombre
-- [ ] Possibilité de supprimer le le pop up d'erreur
 
 ## 🐛 Bugs à résoudre
 

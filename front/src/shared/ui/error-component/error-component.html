@@ -1,5 +1,6 @@
 @if (error()) {
 <div class="error-container">
+    <button class="close-btn" (click)="close()" aria-label="Close">&times;</button>
     <span class="error-icon">&#9888;</span>
     <span class="error-message">{{ error()?.message }}</span>
 </div>
