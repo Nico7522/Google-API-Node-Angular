@@ -14,7 +14,7 @@ export class MailsFilterService {
   }
 
   filteredMails = computed(() => {
-    const mails = this.#mailsService.mails.value() ?? [];
+    const mails = this.#mailsService.mails.value()?.messages ?? [];
     return this.#unreadOnly() ? mails.filter(m => !m.read) : mails;
   });
 }

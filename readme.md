@@ -30,8 +30,8 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 
 ### Emails
 
-- [ ] Filtres avancés de tri
-- [ ] Recherche full-text dans les emails
+- [ ] Filtres de tri
+- [ ] Recherche full-text soit par expéditeur, soit par sujet, ou soit dans le mail
 
 ### Agenda
 
@@ -50,6 +50,9 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 
 ### Améliorations
 
+- [ ] Passer le site en Français
+- [ ] Inclure tous les mails sauf les spam
+- [ ] Ajouter une pagination
 - [ ] Messages d'erreur plus explicites
 
 ## 📦 Installation

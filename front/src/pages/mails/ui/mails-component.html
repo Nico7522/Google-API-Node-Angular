@@ -1,4 +1,4 @@
-<div class="mails-container">
+<main class="mails-container">
     <div class="btn-group">
         <button class="refresh-btn" (click)="refreshMails()" [disabled]="isLoading()">
             <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
@@ -16,4 +16,13 @@
     @if (isLoading()) {
     <app-loading-component />
     }
-</div>
+
+    <div class="pagination-container">
+        <button class="arrow-btn" (click)="getPreviousMail()" [disabled]="isLoading()">
+            &#8592;
+        </button>
+        <button class="arrow-btn" (click)="getNextMail()" [disabled]="isLoading()">
+            &#8594;
+        </button>
+    </div>
+</main>

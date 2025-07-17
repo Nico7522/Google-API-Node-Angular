@@ -6,6 +6,7 @@ import { LoadingComponent } from '../../../shared/ui/loading-component/loading-c
 @Component({
   selector: 'app-agenda-component',
   imports: [CalendarEventComponent, LoadingComponent],
+  providers: [AgendaService],
   templateUrl: './agenda-component.html',
   styleUrl: './agenda-component.scss',
 })

@@ -7,9 +7,7 @@ import { ErrorService } from '../../../shared/models/error/error-service';
 import { CalendarEvent } from '../../../entities/calendar-event/models/interfaces/calendar-event-interface';
 import { UserService } from '../../../shared/models/user/user-service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AgendaService {
   readonly #httpClient = inject(HttpClient);
   readonly #userService = inject(UserService);

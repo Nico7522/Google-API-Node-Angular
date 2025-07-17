@@ -12,13 +12,21 @@ import { MailsFilterService } from '../../../features/models/mails-filter/mails-
   styleUrl: './mails-component.scss',
 })
 export class MailsComponent {
-  #mailsService = inject(MailsService);
-  #mailsFilterService = inject(MailsFilterService);
+  readonly #mailsService = inject(MailsService);
+  readonly #mailsFilterService = inject(MailsFilterService);
   isLoading = computed(() => this.#mailsService.mails.isLoading());
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   filteredMails = this.#mailsFilterService.filteredMails;
 
   refreshMails() {
     this.#mailsService.mails.reload();
+  }
+
+  getNextMail() {
+    this.#mailsService.getNextMail();
+  }
+
+  getPreviousMail() {
+    this.#mailsService.getPreviousMail();
   }
 }

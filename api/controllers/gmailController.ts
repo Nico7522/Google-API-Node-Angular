@@ -6,6 +6,8 @@ import { getTokens, setToken, removeToken } from "../helpers/tokenStorage";
 
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
+  const nextPageToken = req.query.pageToken;
+
   const tokens = getTokens()[userId];
   if (!tokens) {
     return res.status(401).json({ error: "Utilisateur non authentifié" });
@@ -16,8 +18,10 @@ export const getMessages = async (req: Request, res: Response) => {
     const response = await gmail.users.messages.list({
       userId: "me",
       maxResults: 10,
+      pageToken: nextPageToken as string,
     });
     let messages = [];
+
     if (response.data.messages) {
       for (const message of response.data.messages) {
         if (message.id) {
@@ -32,7 +36,7 @@ export const getMessages = async (req: Request, res: Response) => {
     }
     return res.json({
       messages: messages || [],
-      total: messages.length,
+      nextPageToken: response.data.nextPageToken,
     });
   } catch (error: any) {
     if (error.code === 401) {

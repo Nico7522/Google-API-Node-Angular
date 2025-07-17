@@ -12,9 +12,9 @@ import { finalize } from 'rxjs';
   styleUrl: './home-component.scss',
 })
 export class HomeComponent {
-  #googleAuthService = inject(GoogleAuthService);
-  #userService = inject(UserService);
-  #errorService = inject(ErrorService);
+  readonly #googleAuthService = inject(GoogleAuthService);
+  readonly #userService = inject(UserService);
+  readonly #errorService = inject(ErrorService);
   error = this.#errorService.error;
   isLoading = signal(false);
   login() {

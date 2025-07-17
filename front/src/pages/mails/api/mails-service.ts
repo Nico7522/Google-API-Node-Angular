@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, of, map } from 'rxjs';
+import { catchError, EMPTY } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { MailSummary } from '../../../entities/mail-summary/models/interfaces/mail-summary-interface';
 import { ErrorService } from '../../../shared/models/error/error-service';
 import { UserService } from '../../../shared/models/user/user-service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,28 +15,55 @@ export class MailsService {
   readonly #httpClient = inject(HttpClient);
   readonly #errorService = inject(ErrorService);
   readonly #userService = inject(UserService);
+  readonly #router = inject(Router);
+  readonly #activatedRoute = inject(ActivatedRoute);
+  #pageToken = signal<string | undefined>(this.#activatedRoute.snapshot.queryParamMap.get('pageToken') ?? undefined);
+  #previousPageTokens: (string | undefined)[] = [];
+
+  nextPageToken = computed(() => this.mails.value()?.nextPageToken);
 
   mails = rxResource({
     params: () => ({
       userId: this.#userService.userInfo()?.userId,
+      pageToken: this.#pageToken(),
     }),
     stream: ({ params }) => {
-      if (!params.userId) {
-        return of([]);
-      }
-      return this.#httpClient
-        .get<{ messages: MailSummary[]; total: number }>(`${environment.API_URL}/api/gmail/users/${params.userId}/messages`)
-        .pipe(
-          map(response => response.messages || []),
-          catchError(error => {
-            this.#errorService.setError({
-              code: error.status,
-              error: 'Something went wrong',
-              message: 'An error occurred while fetching mails.',
-            });
-            return of([]);
-          })
-        );
+      const url = `${environment.API_URL}/api/gmail/users/${params.userId}/messages`;
+      const queryParams = params.pageToken ? `?pageToken=${params.pageToken}` : '';
+      return this.#httpClient.get<{ messages: MailSummary[]; nextPageToken: string }>(`${url}${queryParams}`).pipe(
+        catchError(error => {
+          this.#errorService.setError({
+            code: error.status,
+            error: 'Something went wrong',
+            message: 'An error occurred while fetching mails.',
+          });
+          return EMPTY;
+        })
+      );
     },
   });
+
+  getNextMail() {
+    const currentNextToken = this.nextPageToken();
+    if (currentNextToken) {
+      this.#updateQueryParams({ pageToken: currentNextToken });
+      this.#previousPageTokens.push(this.#pageToken());
+      this.#pageToken.set(currentNextToken);
+    }
+  }
+
+  getPreviousMail() {
+    if (this.#previousPageTokens.length > 0) {
+      const prevToken = this.#previousPageTokens.pop();
+      this.#updateQueryParams({ pageToken: prevToken ?? null });
+      this.#pageToken.set(prevToken);
+    }
+  }
+
+  #updateQueryParams(queryParams: Record<string, string | null>) {
+    this.#router.navigate([], {
+      queryParams,
+      queryParamsHandling: 'merge',
+    });
+  }
 }
