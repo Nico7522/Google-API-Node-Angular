@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, resource, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { UserService } from '../../models/user/user-service';

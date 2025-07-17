@@ -10,3 +10,23 @@ body {
   min-height: 100vh;
   background: white;
 }
+
+.loader-spinner {
+  width: 19px;
+  height: 19px;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid #512da8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(80, 0, 120, 0.12);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

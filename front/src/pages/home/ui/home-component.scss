@@ -64,7 +64,7 @@
   text-align: center;
 }
 
-.login-btn {
+.btn {
   background: #fff;
   color: theme.$primary-color;
   border: none;
@@ -86,15 +86,23 @@
   cursor: pointer;
 }
 
-.login-btn:hover,
-.login-btn:focus {
+.btn:hover,
+.btn:focus {
   background: #f3f0fa;
   color: #7c43bd;
   box-shadow: 0 4px 16px rgba(80, 0, 120, 0.25);
   transform: translateY(-2px) scale(1.03);
 }
 
-.login-btn img {
+.btn:disabled {
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+  background: #f3f0fa;
+  cursor: wait;
+}
+
+.btn img {
   width: 20px;
   height: 20px;
   margin-right: 12px;
@@ -103,11 +111,11 @@
   padding: 2px;
 }
 
-.center-container > .login-btn {
+.center-container > .btn {
   margin: 12px 0;
 }
 
-.login-btn img.user {
+.btn img.user {
   width: 20px;
   height: 20px;
   margin-right: 12px;

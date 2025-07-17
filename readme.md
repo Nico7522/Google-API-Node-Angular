@@ -43,8 +43,6 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 
 ### Critiques
 
-- [ ] Clear le local storage même si l'API ne répond pas lors de la déconnection
-
 ### Mineurs
 
 - [ ] Interface qui ne s'adapte pas correctement sur mobile

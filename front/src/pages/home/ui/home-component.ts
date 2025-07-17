@@ -3,7 +3,7 @@ import { GoogleAuthService } from '../../../shared/api/google-auth/google-auth-s
 import { UserService } from '../../../shared/models/user/user-service';
 import { ErrorService } from '../../../shared/models/error/error-service';
 import { RouterModule } from '@angular/router';
-import { finalize, tap } from 'rxjs';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-home-component',
   standalone: true,
@@ -24,16 +24,15 @@ export class HomeComponent {
       next(data) {
         window.location.href = data.authUrl;
       },
+      complete: () => this.isLoading.set(false),
     });
   }
 
   logout() {
+    this.isLoading.set(true);
     this.#googleAuthService
       .logout(this.#userService.userInfo()?.id || '')
-      .pipe(
-        tap(() => this.isLoading.set(true)),
-        finalize(() => this.isLoading.set(false))
-      )
+      .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe();
   }
   user = this.#userService.userInfo;
