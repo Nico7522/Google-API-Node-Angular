@@ -3,6 +3,10 @@ import { google } from "googleapis";
 import { oauth2Client } from "../config/googleConfig";
 import { mailToMailSummaryDTO, mailToMailDTO } from "../helpers/mappers";
 import { getTokens, setToken, removeToken } from "../helpers/tokenStorage";
+import {
+  extractEmailWithStyles,
+  extractHtmlFromMessage,
+} from "../helpers/cherrio";
 
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
@@ -62,10 +66,34 @@ export const getMessageById = async (req: Request, res: Response) => {
   let messageDetail = await gmail.users.messages.get({
     userId: "me",
     id: messageId,
+    format: "full",
   });
   if (messageDetail) {
+    const htmlContent = extractHtmlFromMessage(messageDetail.data);
+    let processedEmail = null;
+    if (htmlContent) {
+      processedEmail = extractEmailWithStyles(htmlContent);
+    }
     let mailDTO = mailToMailDTO(messageDetail.data);
-    return res.json(mailDTO);
+    return res.json({
+      // Email informations with raw body
+      mailInfo: mailDTO,
+
+      // Email data processed server-side
+      processedEmail: {
+        // HTML content of the email extracted and cleaned
+        // null if email has no HTML version or extraction failed
+        htmlContent: processedEmail?.html || null,
+
+        // CSS styles extracted from email <head> (<style> tags)
+        // null if no styles are defined in the email
+        cssStyles: processedEmail?.css || null,
+
+        // Flag indicating if email contains CSS styles
+        // Used to decide display mode on client side
+        hasStyles: processedEmail?.hasExternalStyles || false,
+      },
+    });
   } else {
     return res.status(404).json({ error: "Message non trouvé" });
   }

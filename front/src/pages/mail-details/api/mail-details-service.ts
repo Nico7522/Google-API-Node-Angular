@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 import { UserService } from '../../../shared/models/user/user-service';
 import { Mail } from '../../../entities/mail/models/interfaces/mail-interface';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 import { ErrorService } from '../../../shared/models/error/error-service';
 
 @Injectable({
@@ -23,6 +23,7 @@ export class MailDetailsService {
     }),
     stream: ({ params }) =>
       this.#httpClient.get<Mail>(`${environment.API_URL}/api/gmail/users/${params.userId}/messages/${params.mailId}`).pipe(
+        tap(res => console.log(res)),
         catchError(error => {
           this.#errorService.setError({
             code: error.status,

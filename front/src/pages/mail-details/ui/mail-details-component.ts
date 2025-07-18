@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { MailComponent } from '../../../entities/mail/ui/mail-component/mail-component';
 import { MailDetailsService } from '../api/mail-details-service';
 import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
@@ -13,7 +13,7 @@ export class MailDetailsComponent implements OnInit {
   readonly #mailDetailsService = inject(MailDetailsService);
   mailId = input.required<string>();
   mail = this.#mailDetailsService.mailDetails.value;
-  body = computed(() => this.mail()!.body);
+
   status = this.#mailDetailsService.mailDetails.status;
   isError = this.#mailDetailsService.mailDetails.error;
   ngOnInit(): void {
