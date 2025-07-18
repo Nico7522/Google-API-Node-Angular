@@ -17,6 +17,7 @@ export class MailsComponent {
   isLoading = computed(() => this.#mailsService.mails.isLoading());
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   filteredMails = this.#mailsFilterService.filteredMails;
+  isFirstPage = this.#mailsService.isFirstPage;
 
   refreshMails() {
     this.#mailsService.mails.reload();

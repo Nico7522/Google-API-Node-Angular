@@ -21,7 +21,7 @@ export class MailsService {
   #previousPageTokens: (string | undefined)[] = [];
 
   nextPageToken = computed(() => this.mails.value()?.nextPageToken);
-
+  isFirstPage = computed(() => (this.#pageToken() ? true : false));
   mails = rxResource({
     params: () => ({
       userId: this.#userService.userInfo()?.userId,

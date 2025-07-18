@@ -1,5 +1,6 @@
 @if (mail()) {
 <app-mail-component [mail]="mail()!" />
+<div [innerHTML]="body()"></div>
 }
 @if (status() === 'loading') {
 <app-loading-component />
