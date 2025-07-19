@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { MailsService } from '../../../pages/mails/api/mails-service';
+import { MailsService } from '../../api/mails-filter/mails-service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,8 @@ export class MailsFilterService {
   }
 
   setSearchText(text: string) {
+    console.log(text);
+
     this.#mailsService.setSearchQuery(text);
   }
 

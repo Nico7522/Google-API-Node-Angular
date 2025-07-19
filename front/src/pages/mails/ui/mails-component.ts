@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { MailsService } from '../api/mails-service';
+import { MailsService } from '../../../features/api/mails-filter/mails-service';
 import { MailSummaryComponent } from '../../../entities/mail-summary/ui/mail-summary-component/mail-summary-component';
 import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
 import { MailsFilter } from '../../../features/ui/mails-filter/mails-filter';
