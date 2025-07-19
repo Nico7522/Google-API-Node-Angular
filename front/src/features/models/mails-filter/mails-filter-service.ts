@@ -5,16 +5,23 @@ import { MailsService } from '../../../pages/mails/api/mails-service';
   providedIn: 'root',
 })
 export class MailsFilterService {
+  readonly #mailsService = inject(MailsService);
   #unreadOnly = signal(false);
   unreadOnly = this.#unreadOnly.asReadonly();
-  #mailsService = inject(MailsService);
+  #searchText = signal('');
+  searchText = this.#searchText.asReadonly();
 
   toggleUnreadOnly() {
     this.#unreadOnly.update(value => !value);
   }
 
+  setSearchText(text: string) {
+    this.#mailsService.setSearchQuery(text);
+  }
+
   filteredMails = computed(() => {
     const mails = this.#mailsService.mails.value()?.messages ?? [];
-    return this.#unreadOnly() ? mails.filter(m => !m.read) : mails;
+    const filtered = this.#unreadOnly() ? mails.filter(m => !m.read) : mails;
+    return filtered;
   });
 }

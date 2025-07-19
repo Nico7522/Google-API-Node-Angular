@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { MailsFilterService } from '../../models/mails-filter/mails-filter-service';
 
 @Component({
@@ -7,8 +7,10 @@ import { MailsFilterService } from '../../models/mails-filter/mails-filter-servi
   styleUrl: './mails-filter.scss',
 })
 export class MailsFilter {
-  @Input() isLoading!: () => boolean;
-  #filterService = inject(MailsFilterService);
+  readonly #filterService = inject(MailsFilterService);
+  isLoading = input.required<boolean>();
   unreadOnly = this.#filterService.unreadOnly;
+  searchText = this.#filterService.searchText;
   onToggleUnread = () => this.#filterService.toggleUnreadOnly();
+  onSearchButtonClick = (value: string) => this.#filterService.setSearchText(value);
 }

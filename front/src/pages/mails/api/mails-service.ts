@@ -18,6 +18,7 @@ export class MailsService {
   readonly #router = inject(Router);
   readonly #activatedRoute = inject(ActivatedRoute);
   #pageToken = signal<string | undefined>(this.#activatedRoute.snapshot.queryParamMap.get('pageToken') ?? undefined);
+  #searchQuery = signal<string | undefined>('');
   #previousPageTokens: (string | undefined)[] = [];
 
   nextPageToken = computed(() => this.mails.value()?.nextPageToken);
@@ -26,11 +27,15 @@ export class MailsService {
     params: () => ({
       userId: this.#userService.userInfo()?.userId,
       pageToken: this.#pageToken(),
+      searchQuery: this.#searchQuery(),
     }),
     stream: ({ params }) => {
-      const url = `${environment.API_URL}/api/gmail/users/${params.userId}/messages`;
-      const queryParams = params.pageToken ? `?pageToken=${params.pageToken}` : '';
-      return this.#httpClient.get<{ messages: MailSummary[]; nextPageToken: string }>(`${url}${queryParams}`).pipe(
+      const baseUrl = `${environment.API_URL}/api/gmail/users/${params.userId}/messages`;
+      const urlParams = new URLSearchParams();
+      if (params.searchQuery) urlParams.set('search', params.searchQuery);
+      if (params.pageToken) urlParams.set('pageToken', params.pageToken);
+      const url = urlParams.toString() ? `${baseUrl}?${urlParams}` : baseUrl;
+      return this.#httpClient.get<{ messages: MailSummary[]; nextPageToken: string }>(url).pipe(
         catchError(error => {
           this.#errorService.setError({
             code: error.status,
@@ -58,6 +63,11 @@ export class MailsService {
       this.#updateQueryParams({ pageToken: prevToken ?? null });
       this.#pageToken.set(prevToken);
     }
+  }
+
+  setSearchQuery(query: string) {
+    this.#searchQuery.set(query);
+    this.#updateQueryParams({ search: query === '' ? null : query });
   }
 
   #updateQueryParams(queryParams: Record<string, string | null>) {

@@ -1,9 +1,16 @@
-<div class="mails-filter-switch-container">
-    <label class="switch">
-        <input type="checkbox" [checked]="unreadOnly()" (change)="onToggleUnread()">
-        <span class="slider"></span>
-    </label>
-    <span class="switch-label">
-        {{ unreadOnly() ? 'Seulement non lus' : 'Tous' }}
-    </span>
+<div class="mails-filter-container">
+    <input #searchQuery class="mails-filter-input" type="text" placeholder="Rechercher par sujet ou expéditeur..."
+        aria-label="Recherche" />
+    <button class="mails-filter-btn" type="button" (click)="onSearchButtonClick(searchQuery.value)">
+        🔍
+    </button>
+    <div class="mails-filter-switch-container">
+        <label class="switch">
+            <input type="checkbox" [checked]="unreadOnly()" (change)="onToggleUnread()">
+            <span class="slider"></span>
+        </label>
+        <span class="switch-label">
+            {{ unreadOnly() ? 'Seulement non lus' : 'Tous' }}
+        </span>
+    </div>
 </div>

@@ -46,13 +46,10 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 ### Mineurs
 
 - [ ] Interface qui ne s'adapte pas correctement sur mobile
-- [ ] Décalage horaire dans l'affichage des événements
 
 ### Améliorations
 
 - [ ] Passer le site en Français
-- [ ] Inclure tous les mails sauf les spam
-- [ ] Ajouter une pagination
 - [ ] Messages d'erreur plus explicites
 
 ## 📦 Installation

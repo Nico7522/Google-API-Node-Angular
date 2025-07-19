@@ -11,6 +11,7 @@ import {
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const nextPageToken = req.query.pageToken;
+  const search = req.query.search;
 
   const tokens = getTokens()[userId];
   if (!tokens) {
@@ -23,6 +24,7 @@ export const getMessages = async (req: Request, res: Response) => {
       userId: "me",
       maxResults: 10,
       pageToken: nextPageToken as string,
+      q: search as string,
     });
     let messages = [];
 
