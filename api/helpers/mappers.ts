@@ -6,18 +6,7 @@ import { extractHtmlFromMessage } from "./cherrio";
 export function mailToMailDTO(messageDetail: gmail_v1.Schema$Message): MailDTO {
   const payload = messageDetail.payload;
   const body = extractHtmlFromMessage(messageDetail);
-  let date = payload?.headers?.find((h) => h.name === "Date")?.value;
-  if (date) {
-    const d = new Date(date);
-    const day = d.getDate();
-    const month = d.toLocaleString("fr-FR", { month: "long" });
-    const year = d.getFullYear();
-    const hours = d.getHours().toString().padStart(2, "0");
-    const minutes = d.getMinutes().toString().padStart(2, "0");
-    date = `${day} ${month} ${year} ${hours}:${minutes}h`;
 
-    console.log(date);
-  }
   return {
     id: messageDetail.id ?? "",
     threadId: messageDetail.threadId ?? "",

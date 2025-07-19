@@ -41,22 +41,41 @@ components:
     Message:
       type: object
       properties:
-        id:
-          type: string
-        threadId:
-          type: string
-        snippet:
-          type: string
-        read:
-          type: boolean
-        subject:
-          type: string
-        from:
-          type: string
-        to:
-          type: string
-        date:
-          type: string
+        mailInfo:
+          type: object
+          description: Email informations with raw body
+          properties:
+            id:
+              type: string
+            threadId:
+              type: string
+            snippet:
+              type: string
+            read:
+              type: boolean
+            subject:
+              type: string
+            from:
+              type: string
+            to:
+              type: string
+            date:
+              type: string
+        processedEmail:
+          type: object
+          description: Email data processed server-side
+          properties:
+            htmlContent:
+              type: string
+              nullable: true
+              description: HTML content of the email extracted and cleaned. Null if email has no HTML version or extraction failed
+            cssStyles:
+              type: string
+              nullable: true
+              description: CSS styles extracted from email <head> (<style> tags). Null if no styles are defined in the email
+            hasStyles:
+              type: boolean
+              description: Flag indicating if email contains CSS styles. Used to decide display mode on client side
     CalendarEvent:
       type: object
       properties:
@@ -94,18 +113,18 @@ paths:
       tags:
         - Authentification
       responses:
-        '200':
+        "200":
           description: URL d'autorisation générée avec succès
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '500':
+                $ref: "#/components/schemas/AuthResponse"
+        "500":
           description: Erreur lors de la génération de l'URL
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /auth/google/callback:
     get:
       summary: Callback après autorisation Google
@@ -124,7 +143,7 @@ paths:
             type: string
           description: Erreur éventuelle
       responses:
-        '200':
+        "200":
           description: Authentification réussie
           content:
             application/json:
@@ -138,19 +157,19 @@ paths:
                   user:
                     type: object
                   tokens:
-                    $ref: '#/components/schemas/TokenData'
-        '400':
+                    $ref: "#/components/schemas/TokenData"
+        "400":
           description: Erreur dans les paramètres
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Erreur serveur
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /auth/refresh/{userId}:
     post:
       summary: Rafraîchir les tokens d'authentification
@@ -164,7 +183,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Tokens rafraîchis avec succès
           content:
             application/json:
@@ -174,19 +193,19 @@ paths:
                   message:
                     type: string
                   tokens:
-                    $ref: '#/components/schemas/TokenData'
-        '401':
+                    $ref: "#/components/schemas/TokenData"
+        "401":
           description: Refresh token manquant
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Erreur serveur
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /auth/status/{userId}:
     get:
       summary: Vérifier le statut d'authentification
@@ -200,7 +219,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Statut d'authentification
           content:
             application/json:
@@ -228,7 +247,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Déconnexion réussie
           content:
             application/json:
@@ -250,7 +269,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Événements récupérés avec succès
           content:
             application/json:
@@ -260,19 +279,19 @@ paths:
                   events:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CalendarEvent'
-        '401':
+                      $ref: "#/components/schemas/CalendarEvent"
+        "401":
           description: Utilisateur non authentifié
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Erreur serveur
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /api/calendar/users/{userId}events/holidays:
     get:
       summary: Récupérer les jours fériés belges
@@ -287,7 +306,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Jours fériés récupérés avec succès
           content:
             application/json:
@@ -297,25 +316,25 @@ paths:
                   events:
                     type: array
                     items:
-                      $ref: '#/components/schemas/CalendarEvent'
-        '401':
+                      $ref: "#/components/schemas/CalendarEvent"
+        "401":
           description: Utilisateur non authentifié
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Utilisateur non trouvé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Erreur serveur
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /api/gmail/users/{userId}/messages:
     get:
       summary: Récupérer les messages Gmail
@@ -329,7 +348,7 @@ paths:
             type: string
           description: ID utilisateur
       responses:
-        '200':
+        "200":
           description: Messages récupérés avec succès
           content:
             application/json:
@@ -339,21 +358,21 @@ paths:
                   messages:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Message'
+                      $ref: "#/components/schemas/Message"
                   total:
                     type: number
-        '401':
+        "401":
           description: Utilisateur non authentifié
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '500':
+                $ref: "#/components/schemas/Error"
+        "500":
           description: Erreur serveur
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
   /api/gmail/users/{userId}/messages/{messageId}:
     get:
       summary: Récupérer un message Gmail spécifique
@@ -373,22 +392,22 @@ paths:
             type: string
           description: ID du message
       responses:
-        '200':
+        "200":
           description: Message récupéré avec succès
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Message'
-        '401':
+                $ref: "#/components/schemas/Message"
+        "401":
           description: Utilisateur non authentifié
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '404':
+                $ref: "#/components/schemas/Error"
+        "404":
           description: Message non trouvé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: "#/components/schemas/Error"
 tags: []
