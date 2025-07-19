@@ -1,11 +1,11 @@
 import { calendar_v3, gmail_v1 } from "googleapis";
-import { getMailBody } from "./get-mail-body";
 import { MailDTO, MailSumarryDTO } from "../interfaces/mail-interfaces";
 import { EventDTO } from "../interfaces/event-interface";
+import { extractHtmlFromMessage } from "./cherrio";
 
 export function mailToMailDTO(messageDetail: gmail_v1.Schema$Message): MailDTO {
   const payload = messageDetail.payload;
-  const body = getMailBody(messageDetail);
+  const body = extractHtmlFromMessage(messageDetail);
 
   return {
     id: messageDetail.id ?? "",
@@ -15,7 +15,7 @@ export function mailToMailDTO(messageDetail: gmail_v1.Schema$Message): MailDTO {
     to: payload?.headers?.find((h) => h.name === "To")?.value ?? "",
     subject: payload?.headers?.find((h) => h.name === "Subject")?.value ?? "",
     date: payload?.headers?.find((h) => h.name === "Date")?.value ?? "",
-    body,
+    body: body || "",
   };
 }
 

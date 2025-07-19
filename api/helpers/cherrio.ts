@@ -1,8 +1,12 @@
-import cheerio from "cheerio";
+import { gmail_v1 } from "googleapis";
 
 // Côté Node.js - extraction complète
-export function extractHtmlFromMessage(message: any): string | null {
-  function findHtmlPart(payload: any): any {
+export function extractHtmlFromMessage(
+  message: gmail_v1.Schema$Message
+): string | null {
+  function findHtmlPart(
+    payload: gmail_v1.Schema$MessagePart
+  ): gmail_v1.Schema$MessagePart | null {
     if (payload.mimeType === "text/html") {
       return payload;
     }
@@ -17,9 +21,11 @@ export function extractHtmlFromMessage(message: any): string | null {
     return null;
   }
 
-  const htmlPart = findHtmlPart(message.payload);
+  let htmlPart;
+  if (message.payload) htmlPart = findHtmlPart(message.payload);
+  else htmlPart = null;
 
-  if (htmlPart && htmlPart.body.data) {
+  if (htmlPart && htmlPart?.body?.data) {
     // Décoder le contenu base64
     return Buffer.from(htmlPart.body.data, "base64").toString("utf-8");
   }
