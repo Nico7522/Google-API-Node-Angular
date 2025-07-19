@@ -5,7 +5,7 @@
     <div class="mail-container">
         <div class="mail-header">
             <div class="mail-subject">{{ mail().mailInfo.subject }}</div>
-            <div class="mail-date">{{ mail().mailInfo.date| date:'medium' }}</div>
+            <div class="mail-date">{{ mail().mailInfo.date| toFrenchDate }}</div>
         </div>
         <div class="mail-sender">
             <span class="mail-sender-name">{{ mail().mailInfo.from }}</span>

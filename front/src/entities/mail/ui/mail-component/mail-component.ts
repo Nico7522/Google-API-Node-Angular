@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, computed, inject, input } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Mail, ProcessedEmail } from '../../models/interfaces/mail-interface';
 import { RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ToFrenchDatePipe } from '../../../../shared/ui/pipes/to-french-date-pipe';
 
 @Component({
   selector: 'app-mail-component',
-  imports: [CommonModule, DatePipe, RouterModule],
+  imports: [CommonModule, ToFrenchDatePipe, RouterModule],
   templateUrl: './mail-component.html',
   styleUrls: ['./mail-component.scss'],
 })
