@@ -14,7 +14,7 @@
             {{ mail().body }}
         </div> -->
         @if (processedEmail()) {
-        <iframe id="emailFrame" [srcdoc]="processedEmail()" class="email-iframe" sandbox="allow-scripts">
+        <iframe id="emailFrame" [srcdoc]="processedEmail()" class="email-iframe" sandbox="allow-scripts allow-popups">
         </iframe>
         }
     </div>

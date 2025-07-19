@@ -4,3 +4,4 @@
 
 /front/node_modules
 /front/src/environments/environment.development.ts
+/front/.cursor

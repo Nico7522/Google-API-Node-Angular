@@ -10,6 +10,12 @@
     @if (hasData()) {
     @for (mail of filteredMails(); track $index) {
     <app-mail-summary-component [mail]="mail" />
+
+    }
+    @if(filteredMails().length === 0) {
+    <div class="empty-result">
+        <span class="error-icon">Aucun résultat trouvé</span>
+    </div>
     }
 
     <section class="pagination-container">

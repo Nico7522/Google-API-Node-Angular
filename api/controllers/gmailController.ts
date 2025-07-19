@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { google } from "googleapis";
+import { google, youtube_v3 } from "googleapis";
 import { oauth2Client } from "../config/googleConfig";
 import { mailToMailSummaryDTO, mailToMailDTO } from "../helpers/mappers";
 import { getTokens, setToken, removeToken } from "../helpers/tokenStorage";
