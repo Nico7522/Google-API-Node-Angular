@@ -11,11 +11,12 @@ import { LoadingComponent } from '../../../shared/ui/loading-component/loading-c
 })
 export class MailDetailsComponent implements OnInit {
   readonly #mailDetailsService = inject(MailDetailsService);
+
   mailId = input.required<string>();
   mail = this.#mailDetailsService.mailDetails.value;
-
   status = this.#mailDetailsService.mailDetails.status;
   isError = this.#mailDetailsService.mailDetails.error;
+
   ngOnInit(): void {
     if (this.mailId()) {
       this.#mailDetailsService.setMailId(this.mailId());

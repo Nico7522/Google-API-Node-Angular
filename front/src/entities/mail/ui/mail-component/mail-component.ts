@@ -13,6 +13,7 @@ import { ToFrenchDatePipe } from '../../../../shared/ui/pipes/to-french-date-pip
 })
 export class MailComponent implements AfterViewInit {
   readonly #sanatizer = inject(DomSanitizer);
+
   mail = input.required<Mail>();
   processedEmail = computed(() => {
     if (this.mail() && this.mail()?.processedEmail.hasStyles) {
@@ -20,6 +21,7 @@ export class MailComponent implements AfterViewInit {
     }
     return null;
   });
+
   ngAfterViewInit(): void {
     window.addEventListener('message', event => {
       if (event.data?.type === 'resize') {
@@ -30,6 +32,7 @@ export class MailComponent implements AfterViewInit {
       }
     });
   }
+
   #createEmailDocument(email: ProcessedEmail): string {
     return `
       <!DOCTYPE html>

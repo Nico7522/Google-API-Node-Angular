@@ -15,8 +15,11 @@ export class HomeComponent {
   readonly #googleAuthService = inject(GoogleAuthService);
   readonly #userService = inject(UserService);
   readonly #errorService = inject(ErrorService);
+
   error = this.#errorService.error;
   isLoading = signal(false);
+  user = this.#userService.userInfo;
+
   login() {
     // Trigger request for sign in.
     this.isLoading.set(true);
@@ -35,5 +38,4 @@ export class HomeComponent {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe();
   }
-  user = this.#userService.userInfo;
 }

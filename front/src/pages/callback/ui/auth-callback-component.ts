@@ -12,6 +12,7 @@ import { ErrorService } from '../../../shared/models/error/error-service';
 export class AuthCallbackComponent implements OnInit {
   readonly #googleAuthService = inject(GoogleAuthService);
   readonly #errorService = inject(ErrorService);
+
   /**
    * The authorization code received from Google.
    * This code is used to exchange for access tokens.

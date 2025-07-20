@@ -14,6 +14,7 @@ import { MailsFilterService } from '../../../features/models/mails-filter/mails-
 export class MailsComponent {
   readonly #mailsService = inject(MailsService);
   readonly #mailsFilterService = inject(MailsFilterService);
+
   isLoading = computed(() => this.#mailsService.mails.isLoading());
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   filteredMails = this.#mailsFilterService.filteredMails;

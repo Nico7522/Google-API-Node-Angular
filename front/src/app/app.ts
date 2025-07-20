@@ -12,9 +12,9 @@ import { HeaderComponent } from '../shared/ui/header-component/header-component'
   styleUrl: './app.scss',
 })
 export class App {
-  protected title = 'front';
-  #userId = inject(UserService).userInfo()?.userId;
   readonly #googleAuthService = inject(GoogleAuthService);
+  #userId = inject(UserService).userInfo()?.userId;
+  protected title = 'front';
 
   constructor() {
     this.#getUserStatus();

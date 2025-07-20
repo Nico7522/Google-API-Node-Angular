@@ -8,6 +8,10 @@ import { ErrorService } from '../../../shared/models/error/error-service';
 import { UserService } from '../../../shared/models/user/user-service';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/**
+ * Service to manage fetching and paginating mails from the backend API.
+ * Handles search, error reporting, and page navigation.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -17,12 +21,23 @@ export class MailsService {
   readonly #userService = inject(UserService);
   readonly #router = inject(Router);
   readonly #activatedRoute = inject(ActivatedRoute);
+
+  // Signal to track the current page token for pagination
   #pageToken = signal<string | undefined>(this.#activatedRoute.snapshot.queryParamMap.get('pageToken') ?? undefined);
+  // Signal to track the current search query
   #searchQuery = signal<string | undefined>('');
+  // Stack to keep track of previous page tokens for back navigation
   #previousPageTokens: (string | undefined)[] = [];
 
+  // Computed property for the next page token from the mails resource
   nextPageToken = computed(() => this.mails.value()?.nextPageToken);
+  // Computed property to check if the current page is the first page
   isFirstPage = computed(() => (this.#pageToken() ? true : false));
+
+  /**
+   * Resource to fetch mails from the backend API based on user, page, and search query.
+   * Handles errors and updates error service on failure.
+   */
   mails = rxResource({
     params: () => ({
       userId: this.#userService.userInfo()?.userId,
@@ -48,6 +63,10 @@ export class MailsService {
     },
   });
 
+  /**
+   * Navigate to the next page of mails using the next page token.
+   * Updates query params and tracks previous tokens for back navigation.
+   */
   getNextMail() {
     const currentNextToken = this.nextPageToken();
     if (currentNextToken) {
@@ -57,6 +76,10 @@ export class MailsService {
     }
   }
 
+  /**
+   * Navigate to the previous page of mails using the previous page token stack.
+   * Updates query params accordingly.
+   */
   getPreviousMail() {
     if (this.#previousPageTokens.length > 0) {
       const prevToken = this.#previousPageTokens.pop();
@@ -65,11 +88,19 @@ export class MailsService {
     }
   }
 
+  /**
+   * Set the search query for filtering mails and update query params.
+   * @param query The search string to filter mails.
+   */
   setSearchQuery(query: string) {
     this.#searchQuery.set(query);
     this.#updateQueryParams({ search: query === '' ? null : query });
   }
 
+  /**
+   * Helper method to update the router's query parameters.
+   * @param queryParams Key-value pairs for query params to update.
+   */
   #updateQueryParams(queryParams: Record<string, string | null>) {
     this.#router.navigate([], {
       queryParams,
