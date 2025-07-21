@@ -13,6 +13,13 @@ export class AgendaService {
   readonly #userService = inject(UserService);
   readonly #errorService = inject(ErrorService);
 
+  /**
+   * Fetches calendar events and public holidays for the current user.
+   * It first fetches the user's calendar events, then fetches public holidays.
+   * The two lists of events are then merged and sorted by their start date.
+   * If an error occurs during the process, it is handled by the ErrorService,
+   * and null is returned as the result.
+   */
   canlendar = rxResource({
     params: () => ({ userId: this.#userService.userInfo()?.userId }),
     stream: ({ params }) => {
