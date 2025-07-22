@@ -7,7 +7,6 @@ import {
   extractEmailWithStyles,
   extractHtmlFromMessage,
 } from "../helpers/cherrio";
-
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const nextPageToken = req.query.pageToken;
