@@ -18,6 +18,7 @@
     "googleapis": "^126.0.1",
     "js-yaml": "^4.1.0",
     "mailparser": "^3.7.4",
+    "ollama": "^0.5.16",
     "openapi": "^1.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

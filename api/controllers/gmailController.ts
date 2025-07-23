@@ -7,6 +7,8 @@ import {
   extractEmailWithStyles,
   extractHtmlFromMessage,
 } from "../helpers/cherrio";
+import { MailDTO } from "../interfaces/mail-interfaces";
+import { Ollama } from "ollama";
 export const getMessages = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const nextPageToken = req.query.pageToken;
@@ -99,3 +101,53 @@ export const getMessageById = async (req: Request, res: Response) => {
     return res.status(404).json({ error: "Message non trouvé" });
   }
 };
+
+export const getFilteredMailsByAI = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const { messageIds, userPrompt } = req.body as {
+      messageIds: string[];
+      userPrompt: string;
+    };
+    const tokens = getTokens()[userId];
+    if (!tokens) {
+      return res.status(401).json({ error: "Utilisateur non authentifié" });
+    }
+    oauth2Client.setCredentials(tokens);
+    const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+    const messages = await Promise.all(
+      messageIds.map(async (messageId) => {
+        const messageDetail = await gmail.users.messages.get({
+          userId: "me",
+          id: messageId,
+        });
+        return mailToMailDTO(messageDetail.data);
+      })
+    );
+    const filteredMails = await askAI(userPrompt, messages);
+    return res.status(200).json({ filteredMails });
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to filter mails with AI" });
+  }
+};
+
+async function askAI(userPrompt: string, mails: MailDTO[]) {
+  const systemPrompt =
+    "You are a helpful assistant that read the emails and return only the emails that match my requirements. In your response, only give me the mail ID.";
+  const ollama = new Ollama();
+  const response = await ollama.chat({
+    model: "mistral",
+    messages: [
+      {
+        role: "system",
+        content:
+          systemPrompt +
+          mails.map((mail) => `${mail.id} - ${mail.body}`).join("\n"),
+      },
+      { role: "user", content: userPrompt },
+    ],
+  });
+
+  return response.message.content;
+}

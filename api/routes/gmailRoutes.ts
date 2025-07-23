@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { getMessages, getMessageById } from "../controllers/gmailController";
+import {
+  getMessages,
+  getMessageById,
+  getFilteredMailsByAI,
+} from "../controllers/gmailController";
 
 const router = Router();
 
@@ -87,5 +91,13 @@ router.get("/users/:userId/messages", getMessages);
  *               $ref: '#/components/schemas/Error'
  */
 router.get("/users/:userId/messages/:messageId", getMessageById);
+
+/**
+ * @swagger
+ * /api/gmail/users/{userId}/messages/ai:
+ *   post:
+ *     summary: Filtrer les messages avec IA
+ */
+router.post("/users/:userId/messages/ai", getFilteredMailsByAI);
 
 export default router;
