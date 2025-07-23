@@ -19,6 +19,10 @@
   transform: translateY(-2px) scale(1.02);
 }
 
+.mail-container.focus-by-ia {
+  border: 2px solid #512da8;
+}
+
 .mail-header {
   display: flex;
   justify-content: space-between;

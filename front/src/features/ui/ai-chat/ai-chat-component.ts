@@ -1,4 +1,4 @@
-import { Component, effect, inject, output, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AiChatService } from '../../api/ai-chat/ai-chat-service';
@@ -19,11 +19,5 @@ export class AiChatComponent {
 
   closeChat() {
     this.closeDialog.emit();
-  }
-
-  constructor() {
-    effect(() => {
-      console.log(this.#aiChatService.filteredMailsByIA.value());
-    });
   }
 }

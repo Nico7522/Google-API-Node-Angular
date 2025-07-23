@@ -1,45 +1,36 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import ollama from 'ollama';
+import { of, tap } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { MailSummary } from '../../../entities/mail-summary/models/interfaces/mail-summary-interface';
 import { MailsFilterService } from '../../models/mails-filter/mails-filter-service';
+import { UserService } from '../../../shared/models/user/user-service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AiChatService {
-  #mailsFilterService = inject(MailsFilterService);
+  readonly #mailsFilterService = inject(MailsFilterService);
+  readonly #httpClient = inject(HttpClient);
+  readonly #userService = inject(UserService);
   #userPrompt = signal('');
-  mails = computed(() => this.#mailsFilterService.filteredMails());
-
-  #sendMessage(userPrompt: string, mails: MailSummary[]): Observable<string> {
-    const systemPrompt =
-      'You are a helpful assistant that read the emails and return only the emails that match my requirements. In your response, only give me the mail ID.';
-    const bodyMail = mails.map(mail => `${mail.id} - ${mail.subject}`).join('\n');
-    console.log(bodyMail);
-    return from(
-      ollama
-        .chat({
-          model: 'mistral',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userPrompt + bodyMail },
-          ],
-        })
-        .then(response => response.message.content)
-        .catch(error => {
-          throw error;
-        })
-    );
-  }
+  #userId = computed(() => this.#userService.userInfo()?.userId);
+  #mails = computed(() => this.#mailsFilterService.filteredMails().map(mail => mail.id));
+  filteredMailsByIA = rxResource({
+    params: () => ({ userPrompt: this.#userPrompt(), userId: this.#userId() }),
+    stream: ({ params }) =>
+      this.#userPrompt()
+        ? this.#httpClient
+            .post<{ filteredMails: string[] }>(`${environment.API_URL}/api/gmail/users/${params.userId}/messages/ai`, {
+              userPrompt: params.userPrompt,
+              messageIds: this.#mails(),
+            })
+            .pipe(tap(res => this.#mailsFilterService.setFilteredByIAMailIds(res.filteredMails)))
+        : of({ filteredMails: [] }),
+    defaultValue: { filteredMails: [] },
+  });
 
   setUserPrompt(userPrompt: string) {
     this.#userPrompt.set(userPrompt);
   }
-  filteredMailsByIA = rxResource({
-    params: () => ({ userPrompt: this.#userPrompt(), mails: this.mails() }),
-    stream: ({ params }) => (this.#userPrompt() ? this.#sendMessage(params.userPrompt, params.mails) : of('')),
-    defaultValue: '',
-  });
 }

@@ -4,4 +4,5 @@ export interface MailSummary {
   from: string;
   subject: string;
   read: boolean;
+  isFocusByIA?: boolean;
 }

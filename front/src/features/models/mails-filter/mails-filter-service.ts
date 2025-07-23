@@ -1,6 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { MailsService } from '../../api/mails-filter/mails-service';
-
 /**
  * Service to manage mail filtering logic, including unread-only toggle and search text.
  * Delegates mail fetching to MailsService and provides filtered mail list.
@@ -19,12 +18,16 @@ export class MailsFilterService {
   // Readonly signal for external use
   searchText = this.#searchText.asReadonly();
 
+  #filteredByIAMailIds = signal<string[]>([]);
+
   /**
-   * Computed property to return mails filtered by unread state.
+   * Linked signal to return mails filtered by unread state.
    */
   filteredMails = computed(() => {
     const mails = this.#mailsService.mails.value()?.messages ?? [];
-    const filtered = this.#unreadOnly() ? mails.filter(m => !m.read) : mails;
+    let filtered = this.#unreadOnly() ? mails.filter(m => !m.read) : mails;
+    filtered =
+      this.#filteredByIAMailIds().length > 0 ? filtered.map(m => ({ ...m, isFocusByIA: this.#filteredByIAMailIds().includes(m.id) })) : filtered;
     return filtered;
   });
   /**
@@ -41,5 +44,9 @@ export class MailsFilterService {
   setSearchText(text: string) {
     console.log(text);
     this.#mailsService.setSearchQuery(text);
+  }
+
+  setFilteredByIAMailIds(mailIds: string[]) {
+    this.#filteredByIAMailIds.set(mailIds);
   }
 }

@@ -391,4 +391,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/gmail/users/{userId}/messages/ai:
+    post:
+      summary: Filtrer les messages avec IA
 tags: []

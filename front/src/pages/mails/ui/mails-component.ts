@@ -5,6 +5,7 @@ import { LoadingComponent } from '../../../shared/ui/loading-component/loading-c
 import { MailsFilter } from '../../../features/ui/mails-filter/mails-filter';
 import { MailsFilterService } from '../../../features/models/mails-filter/mails-filter-service';
 import { AiChatComponent } from '../../../features/ui/ai-chat/ai-chat-component';
+import { AiChatService } from '../../../features/api/ai-chat/ai-chat-service';
 
 @Component({
   selector: 'app-mails-component',
@@ -15,8 +16,8 @@ import { AiChatComponent } from '../../../features/ui/ai-chat/ai-chat-component'
 export class MailsComponent {
   readonly #mailsService = inject(MailsService);
   readonly #mailsFilterService = inject(MailsFilterService);
-
-  isLoading = computed(() => this.#mailsService.mails.isLoading());
+  readonly #aiChatService = inject(AiChatService);
+  isLoading = computed(() => this.#mailsService.mails.isLoading() || this.#aiChatService.filteredMailsByIA.isLoading());
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   filteredMails = this.#mailsFilterService.filteredMails;
   isFirstPage = this.#mailsService.isFirstPage;

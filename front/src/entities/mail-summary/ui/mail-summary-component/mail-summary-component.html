@@ -1,10 +1,9 @@
-<div [routerLink]="['/mails', mail().id]" class="mail-container">
-    <div class="mail-header">
-        <div class="mail-subject">{{ mail().subject }}</div>
-        <div class="mail-date">{{ mail().date | toFrenchDate }}</div>
-    </div>
-    <div class="mail-sender">
-        <span class="mail-sender-name">{{ mail().from }}</span>
-    </div>
-
+<div [class.focus-by-ia]="mail().isFocusByIA" [routerLink]="['/mails', mail().id]" class="mail-container">
+  <div class="mail-header">
+    <div class="mail-subject">{{ mail().subject }}</div>
+    <div class="mail-date">{{ mail().date | toFrenchDate }}</div>
+  </div>
+  <div class="mail-sender">
+    <span class="mail-sender-name">{{ mail().from }}</span>
+  </div>
 </div>
