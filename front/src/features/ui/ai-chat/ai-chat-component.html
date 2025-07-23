@@ -1,0 +1,10 @@
+<div class="wrapper">
+    <h2>Ask IA to filter your mails</h2>
+    <button class="close-button" (click)="closeChat()">×</button>
+    <div class="chat-input">
+        <input type="text" [(ngModel)]="dialog" placeholder="Type your message here..." class="message-input">
+        <button (click)="sendMessage()" class="ask-button">
+            Ask
+        </button>
+    </div>
+</div>

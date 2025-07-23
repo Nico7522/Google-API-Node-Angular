@@ -115,12 +115,29 @@
   transition: transform 0.3s ease;
 }
 
-.refresh-icon.spinning {
-  animation: spin 1s linear infinite;
+.ask-btn {
+  display: flex;
+  align-items: center;
+  padding: 10px 18px;
+  background: theme.$primary-button-color;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(80, 0, 120, 0.15);
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.1s;
+  gap: 8px;
 }
 
-.refresh-btn:disabled .refresh-icon {
-  filter: brightness(0) invert(0.5);
+.ask-btn:hover:not(:disabled) {
+  background: #7c43bd;
+  box-shadow: 0 4px 16px rgba(80, 0, 120, 0.25);
+  transform: translateY(-2px) scale(1.03);
 }
 
 @keyframes spin {

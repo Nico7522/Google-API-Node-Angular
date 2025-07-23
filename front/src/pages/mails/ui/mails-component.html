@@ -4,8 +4,14 @@
             <img src="https://img.icons8.com/ios-filled/50/ffffff/refresh.png" alt="Refresh" class="refresh-icon">
             Refresh
         </button>
+        <button class="ask-btn" (click)="askIA()" [disabled]="isLoading()">
+            Ask IA
+        </button>
         <app-mails-filter />
     </section>
+    @if (openIAChat()) {
+    <app-ai-chat-component (closeDialog)="onCloseDialog()" />
+    }
 
     @if (hasData()) {
     @for (mail of filteredMails(); track $index) {

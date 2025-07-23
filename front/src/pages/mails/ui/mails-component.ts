@@ -1,13 +1,14 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MailsService } from '../../../features/api/mails-filter/mails-service';
 import { MailSummaryComponent } from '../../../entities/mail-summary/ui/mail-summary-component/mail-summary-component';
 import { LoadingComponent } from '../../../shared/ui/loading-component/loading-component';
 import { MailsFilter } from '../../../features/ui/mails-filter/mails-filter';
 import { MailsFilterService } from '../../../features/models/mails-filter/mails-filter-service';
+import { AiChatComponent } from '../../../features/ui/ai-chat/ai-chat-component';
 
 @Component({
   selector: 'app-mails-component',
-  imports: [MailSummaryComponent, LoadingComponent, MailsFilter],
+  imports: [MailSummaryComponent, LoadingComponent, MailsFilter, AiChatComponent],
   templateUrl: './mails-component.html',
   styleUrl: './mails-component.scss',
 })
@@ -20,6 +21,8 @@ export class MailsComponent {
   filteredMails = this.#mailsFilterService.filteredMails;
   isFirstPage = this.#mailsService.isFirstPage;
 
+  openIAChat = signal(false);
+
   refreshMails() {
     this.#mailsService.mails.reload();
   }
@@ -30,5 +33,13 @@ export class MailsComponent {
 
   getPreviousMail() {
     this.#mailsService.getPreviousMail();
+  }
+
+  askIA() {
+    this.openIAChat.set(true);
+  }
+
+  onCloseDialog() {
+    this.openIAChat.set(false);
   }
 }
