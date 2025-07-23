@@ -30,6 +30,8 @@ Ce projet permet de centraliser la gestion des emails et des événements dans u
 
 ### Emails
 
+- [ ] Ajout d'un agent IA pour trier les mails
+
 ### Agenda
 
 ### Général
