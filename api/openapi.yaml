@@ -38,25 +38,58 @@ components:
           type: string
         expiry_date:
           type: number
-    Message:
+    Messages:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailSumarryDTO'
+        nextPageToken:
+          type: string
+          nullable: true
+          description: Token de pagination pour la prochaine page
+    MessageDetails:
+      type: object
+      properties:
+        mailInfo:
+          $ref: '#/components/schemas/MailSumarryDTO'
+        processedEmail:
+          $ref: '#/components/schemas/ProcessedEmail'
+    ProcessedEmail:
+      type: object
+      properties:
+        htmlContent:
+          type: string
+          nullable: true
+        cssStyles:
+          type: string
+          nullable: true
+        hasStyles:
+          type: boolean
+    MailSumarryDTO:
       type: object
       properties:
         id:
-          type: string
-        threadId:
-          type: string
-        snippet:
-          type: string
-        read:
-          type: boolean
-        subject:
           type: string
         from:
           type: string
         to:
           type: string
+        subject:
+          type: string
         date:
           type: string
+        read:
+          type: boolean
+          nullable: true
+    MailsIds:
+      type: object
+      properties:
+        mailIds:
+          type: array
+          items:
+            type: string
     CalendarEvent:
       type: object
       properties:
@@ -334,14 +367,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  messages:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Message'
-                  total:
-                    type: number
+                $ref: '#/components/schemas/Messages'
         '401':
           description: Utilisateur non authentifié
           content:
@@ -378,7 +404,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Message'
+                $ref: '#/components/schemas/MessageDetails'
         '401':
           description: Utilisateur non authentifié
           content:
@@ -394,4 +420,54 @@ paths:
   /api/gmail/users/{userId}/messages/ai:
     post:
       summary: Filtrer les messages avec IA
+      tags:
+        - Gmail
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: ID utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userPrompt:
+                  type: string
+                  description: Requête de filtrage pour l'IA
+                  example: emails contenant uniquement des voitures rouges
+      responses:
+        '200':
+          description: Messages filtrés avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mailsIds:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FilteredMailsResponse'
+        '400':
+          description: Requête invalide
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Utilisateur non authentifié
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 tags: []

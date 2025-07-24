@@ -65,22 +65,53 @@ const options = {
             },
           },
         },
-        Message: {
+        Messages: {
+          type: "object",
+          properties: {
+            messages: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/MailSumarryDTO",
+              },
+            },
+            nextPageToken: {
+              type: "string",
+              nullable: true,
+              description: "Token de pagination pour la prochaine page",
+            },
+          },
+        },
+        MessageDetails: {
+          type: "object",
+          properties: {
+            mailInfo: {
+              $ref: "#/components/schemas/MailSumarryDTO",
+            },
+            processedEmail: {
+              $ref: "#/components/schemas/ProcessedEmail",
+            },
+          },
+        },
+        ProcessedEmail: {
+          type: "object",
+          properties: {
+            htmlContent: {
+              type: "string",
+              nullable: true,
+            },
+            cssStyles: {
+              type: "string",
+              nullable: true,
+            },
+            hasStyles: {
+              type: "boolean",
+            },
+          },
+        },
+        MailSumarryDTO: {
           type: "object",
           properties: {
             id: {
-              type: "string",
-            },
-            threadId: {
-              type: "string",
-            },
-            snippet: {
-              type: "string",
-            },
-            read: {
-              type: "boolean",
-            },
-            subject: {
               type: "string",
             },
             from: {
@@ -89,8 +120,26 @@ const options = {
             to: {
               type: "string",
             },
+            subject: {
+              type: "string",
+            },
             date: {
               type: "string",
+            },
+            read: {
+              type: "boolean",
+              nullable: true,
+            },
+          },
+        },
+        MailsIds: {
+          type: "object",
+          properties: {
+            mailIds: {
+              type: "array",
+              items: {
+                type: "string",
+              },
             },
           },
         },

@@ -2,9 +2,19 @@
     <h2>Ask IA to filter your mails</h2>
     <button class="close-button" (click)="closeChat()">×</button>
     <div class="chat-input">
-        <input type="text" [(ngModel)]="dialog" placeholder="Type your message here..." class="message-input">
-        <button (click)="sendMessage()" class="ask-button">
-            Ask
-        </button>
+        <input type="text" [(ngModel)]="dialog" placeholder="Type your message here..." class="message-input"
+            [disabled]="isLoading()">
+        <div class="button-group">
+            @if (!isLoading()) {
+            <button (click)="sendMessage()" class="ask-button">
+                Ask
+            </button>
+            }
+            @if (isLoading()) {
+            <button (click)="cancelRequest()" class="cancel-button">
+                Cancel
+            </button>
+            }
+        </div>
     </div>
 </div>

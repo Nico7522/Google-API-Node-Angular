@@ -19,9 +19,12 @@
     "js-yaml": "^4.1.0",
     "mailparser": "^3.7.4",
     "ollama": "^0.5.16",
+    "openai": "^5.10.2",
     "openapi": "^1.0.1",
+    "reflect-metadata": "^0.2.2",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "typedi": "^0.10.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.14",

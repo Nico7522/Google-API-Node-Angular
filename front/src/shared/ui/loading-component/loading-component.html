@@ -1,3 +1,6 @@
 <div class="loader-overlay">
+    @if (message()) {
+    <div class="loader-text">{{ message() }}</div>
+    }
     <div class="loader-spinner"></div>
 </div>

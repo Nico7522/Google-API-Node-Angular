@@ -18,6 +18,7 @@ export class MailsComponent {
   readonly #mailsFilterService = inject(MailsFilterService);
   readonly #aiChatService = inject(AiChatService);
   isLoading = computed(() => this.#mailsService.mails.isLoading() || this.#aiChatService.filteredMailsByIA.isLoading());
+  loadingMessage = computed(() => (this.#aiChatService.filteredMailsByIA.isLoading() ? 'Analyse en cours...' : 'Chargement des emails...'));
   hasData = computed(() => this.#mailsService.mails.status() === 'resolved');
   filteredMails = this.#mailsFilterService.filteredMails;
   isFirstPage = this.#mailsService.isFirstPage;

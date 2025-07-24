@@ -5,7 +5,7 @@
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
+  z-index: 1002;
   padding: 30px;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -57,6 +57,17 @@ h2 {
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 6px;
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
 }
 
 button {
@@ -82,4 +93,12 @@ button:hover {
   background: #7c43bd;
   box-shadow: 0 4px 16px rgba(80, 0, 120, 0.25);
   transform: translateY(-2px) scale(1.03);
+}
+
+.cancel-button {
+  background: #dc3545 !important;
+
+  &:hover {
+    background: #c82333 !important;
+  }
 }

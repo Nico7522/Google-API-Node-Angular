@@ -27,14 +27,7 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 messages:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Message'
- *                 total:
- *                   type: number
+ *               $ref: '#/components/schemas/Messages'
  *       401:
  *         description: Utilisateur non authentifié
  *         content:
@@ -76,7 +69,7 @@ router.get("/users/:userId/messages", getMessages);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Message'
+ *               $ref: '#/components/schemas/MessageDetails'
  *       401:
  *         description: Utilisateur non authentifié
  *         content:
@@ -97,6 +90,56 @@ router.get("/users/:userId/messages/:messageId", getMessageById);
  * /api/gmail/users/{userId}/messages/ai:
  *   post:
  *     summary: Filtrer les messages avec IA
+ *     tags:
+ *       - Gmail
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID utilisateur
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userPrompt:
+ *                 type: string
+ *                 description: Requête de filtrage pour l'IA
+ *                 example: "emails contenant uniquement des voitures rouges"
+ *     responses:
+ *       200:
+ *         description: Messages filtrés avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 mailsIds:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/FilteredMailsResponse'
+ *       400:
+ *         description: Requête invalide
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Utilisateur non authentifié
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Erreur serveur
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/users/:userId/messages/ai", getFilteredMailsByAI);
 

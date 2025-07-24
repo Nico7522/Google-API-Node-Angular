@@ -1,4 +1,4 @@
-import { Component, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AiChatService } from '../../api/ai-chat/ai-chat-service';
@@ -12,9 +12,18 @@ import { AiChatService } from '../../api/ai-chat/ai-chat-service';
 export class AiChatComponent {
   readonly #aiChatService = inject(AiChatService);
   dialog = signal('');
+  isLoading = computed(() => this.#aiChatService.filteredMailsByIA.isLoading());
   closeDialog = output<void>();
+
   sendMessage() {
-    this.#aiChatService.setUserPrompt(this.dialog());
+    if (this.dialog().trim()) {
+      this.#aiChatService.setUserPrompt(this.dialog());
+    }
+  }
+
+  cancelRequest() {
+    this.dialog.set('');
+    this.#aiChatService.setUserPrompt('');
   }
 
   closeChat() {
