@@ -14,6 +14,7 @@ import { AiService } from "./ai-services";
 
 @Service()
 export class GmailService implements GmailRepository {
+  num = 1;
   async getFilteredMailsByAI(
     userId: string,
     messageIds: string[],
@@ -69,6 +70,7 @@ export class GmailService implements GmailRepository {
     const response = await gmail.users.messages.get({
       userId: "me",
       id: messageId,
+      format: "full",
     });
 
     if (response.data) {
@@ -97,6 +99,8 @@ export class GmailService implements GmailRepository {
       q?: string;
     }
   ): Promise<{ messages: MailSumarryDTO[]; nextPageToken: string | null }> {
+    this.num++;
+    console.log("num", this.num);
     const tokens = getTokens()[userId];
     if (!tokens) {
       throw new Error("User not authenticated");

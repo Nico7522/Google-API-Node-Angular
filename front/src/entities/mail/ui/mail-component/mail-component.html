@@ -5,14 +5,12 @@
     <div class="mail-container">
         <div class="mail-header">
             <div class="mail-subject">{{ mail().mailInfo.subject }}</div>
-            <div class="mail-date">{{ mail().mailInfo.date| toFrenchDate }}</div>
+            <div class="mail-date">{{ mail().mailInfo.date | toFrenchDate }}</div>
         </div>
         <div class="mail-sender">
             <span class="mail-sender-name">{{ mail().mailInfo.from }}</span>
         </div>
-        <!-- <div class="mail-body">
-            {{ mail().body }}
-        </div> -->
+
         @if (processedEmail()) {
         <iframe id="emailFrame" [srcdoc]="processedEmail()" class="email-iframe" sandbox="allow-scripts allow-popups">
         </iframe>

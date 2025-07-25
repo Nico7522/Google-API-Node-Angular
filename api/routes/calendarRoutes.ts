@@ -1,8 +1,4 @@
 import { Router } from "express";
-import {
-  getCalendarEvents,
-  getHolidayEvents,
-} from "../controllers/calendarController";
 
 const router = Router();
 

@@ -1,11 +1,12 @@
 import { Router } from "express";
-import {
-  getMessages,
-  getMessageById,
-  getFilteredMailsByAI,
-} from "../controllers/gmailController";
+import { mailController } from "../controllers/gmailController";
+import Container from "typedi";
+import { GmailService } from "../services/gmail-service";
 
 const router = Router();
+
+// Create an instance of the mailController with proper dependency injection
+const gmailController = new mailController(Container.get(GmailService));
 
 /**
  * @swagger
@@ -41,7 +42,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/users/:userId/messages", getMessages);
+router.get("/users/:userId/messages", gmailController.getMessage);
 
 /**
  * @swagger
@@ -83,7 +84,10 @@ router.get("/users/:userId/messages", getMessages);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get("/users/:userId/messages/:messageId", getMessageById);
+router.get(
+  "/users/:userId/messages/:messageId",
+  gmailController.getMessageById
+);
 
 /**
  * @swagger
@@ -141,6 +145,6 @@ router.get("/users/:userId/messages/:messageId", getMessageById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post("/users/:userId/messages/ai", getFilteredMailsByAI);
+router.post("/users/:userId/messages/ai", gmailController.getFilteredMailsByAI);
 
 export default router;

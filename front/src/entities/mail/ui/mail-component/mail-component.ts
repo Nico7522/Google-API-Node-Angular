@@ -16,8 +16,8 @@ export class MailComponent implements AfterViewInit {
 
   mail = input.required<Mail>();
   processedEmail = computed(() => {
-    if (this.mail() && this.mail()?.processedEmail.hasStyles) {
-      return this.#sanatizer.bypassSecurityTrustHtml(this.#createEmailDocument(this.mail()!.processedEmail));
+    if (this.mail() && this.mail()?.processedEmail) {
+      return this.#sanatizer.bypassSecurityTrustHtml(this.#createEmailDocument(this.mail().processedEmail));
     }
     return null;
   });
