@@ -1,0 +1,31 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Corps du robot -->
+  <rect x="50" y="40" width="100" height="100" rx="20" ry="20" fill="#a0d8f1" stroke="#5ca9dd" stroke-width="4"/>
+
+  <!-- Antenne -->
+  <line x1="100" y1="40" x2="100" y2="20" stroke="#888" stroke-width="3"/>
+  <circle cx="100" cy="15" r="5" fill="#ffd966"/>
+
+  <!-- Yeux -->
+  <circle cx="75" cy="75" r="12" fill="#34e0a1"/>
+  <circle cx="125" cy="75" r="12" fill="#34e0a1"/>
+  
+  <!-- Pupilles -->
+  <circle cx="78" cy="73" r="5" fill="#0d6a5f"/>
+  <circle cx="128" cy="73" r="5" fill="#0d6a5f"/>
+
+  <!-- Lueur autour des yeux (effet IA) -->
+  <circle cx="75" cy="75" r="15" fill="none" stroke="#34e0a1" stroke-width="2" opacity="0.5"/>
+  <circle cx="125" cy="75" r="15" fill="none" stroke="#34e0a1" stroke-width="2" opacity="0.5"/>
+
+  <!-- Bouche (sourire simple) -->
+  <path d="M80 110 Q100 125 120 110" stroke="#555" stroke-width="3" fill="none"/>
+
+  <!-- Détails techniques (lignes sur le corps) -->
+  <line x1="60" y1="50" x2="60" y2="130" stroke="#5ca9dd" stroke-width="2" opacity="0.3"/>
+  <line x1="90" y1="50" x2="90" y2="130" stroke="#5ca9dd" stroke-width="2" opacity="0.3"/>
+  <line x1="120" y1="50" x2="120" y2="130" stroke="#5ca9dd" stroke-width="2" opacity="0.3"/>
+
+  <!-- Bouton sur le menton -->
+  <circle cx="100" cy="130" r="8" fill="#ff6b6b" stroke="#c44d4d" stroke-width="1"/>
+</svg>

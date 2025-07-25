@@ -26,7 +26,8 @@ export class MailsComponent {
   openIAChat = signal(false);
 
   refreshMails() {
-    this.#mailsService.mails.reload();
+    this.#mailsService.reloadMails();
+    this.#mailsFilterService.resetFilteredMailsByIA();
   }
 
   getNextMail() {

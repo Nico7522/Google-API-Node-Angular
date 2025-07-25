@@ -12,7 +12,8 @@
         </div>
 
         @if (processedEmail()) {
-        <iframe id="emailFrame" [srcdoc]="processedEmail()" class="email-iframe" sandbox="allow-scripts allow-popups">
+        <iframe id="emailFrame" [srcdoc]="processedEmail()" class="email-iframe" x-frame-options="ALLOW-FROM *"
+            sandbox="allow-scripts allow-popups">
         </iframe>
         }
     </div>

@@ -98,6 +98,13 @@ export class MailsService {
   }
 
   /**
+   * Reload the mails resource.
+   */
+  reloadMails() {
+    this.mails.reload();
+  }
+
+  /**
    * Helper method to update the router's query parameters.
    * @param queryParams Key-value pairs for query params to update.
    */

@@ -34,6 +34,9 @@ export class MailComponent implements AfterViewInit {
   }
 
   #createEmailDocument(email: ProcessedEmail): string {
+    // Process HTML content to add target="_blank" to all links
+    const processedHtmlContent = this.#addTargetBlankToLinks(email.htmlContent || 'Contenu non disponible');
+
     return `
       <!DOCTYPE html>
       <html>
@@ -45,22 +48,46 @@ export class MailComponent implements AfterViewInit {
             html, body {
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            overflow-y: hidden;
             box-sizing: border-box;
             width: 100%;
           }
           </style>
         </head>
         <body>
-          ${email.htmlContent || 'Contenu non disponible'}
+          ${processedHtmlContent}
           <script>
     window.addEventListener('load', () => {
       const height = document.body.scrollHeight;
       parent.postMessage({ type: 'resize', height }, '*');
+      
+      // Add click event listeners to all links to ensure they open in new window
+      const links = document.querySelectorAll('a[href]');
+      links.forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+            e.preventDefault();
+            window.open(href, '_blank', 'noopener,noreferrer');
+          }
+        });
+      });
     });
   </script>
         </body>
       </html>
     `;
+  }
+
+  #addTargetBlankToLinks(htmlContent: string): string {
+    // Use regex to add target="_blank" to all anchor tags that don't already have it
+    return htmlContent.replace(/<a\s+([^>]*?)href\s*=\s*["']([^"']+)["']([^>]*?)>/gi, (match, beforeHref, href, afterHref) => {
+      // Skip if it's already a mailto or tel link, or if target="_blank" already exists
+      if (href.startsWith('mailto:') || href.startsWith('tel:') || match.includes('target="_blank"')) {
+        return match;
+      }
+      // Add target="_blank" and rel="noopener noreferrer" for security
+      return `<a ${beforeHref}href="${href}"${afterHref} target="_blank" rel="noopener noreferrer">`;
+    });
   }
 }

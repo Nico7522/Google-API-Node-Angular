@@ -18,10 +18,11 @@ export class MailsFilterService {
   // Readonly signal for external use
   searchText = this.#searchText.asReadonly();
 
+  // Signal to track the filtered by IA mail ids
   #filteredByIAMailIds = signal<string[]>([]);
 
   /**
-   * Linked signal to return mails filtered by unread state.
+   * Computed signal to return mails filtered by unread state.
    */
   filteredMails = computed(() => {
     const mails = this.#mailsService.mails.value()?.messages ?? [];
@@ -46,7 +47,18 @@ export class MailsFilterService {
     this.#mailsService.setSearchQuery(text);
   }
 
+  /**
+   * Set the filtered by IA mail ids.
+   * @param mailIds The mail ids to filter by.
+   */
   setFilteredByIAMailIds(mailIds: string[]) {
     this.#filteredByIAMailIds.set(mailIds);
+  }
+
+  /**
+   * Reset the filtered by IA mail ids.
+   */
+  resetFilteredMailsByIA() {
+    this.#filteredByIAMailIds.set([]);
   }
 }
