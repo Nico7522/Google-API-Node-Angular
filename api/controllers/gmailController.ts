@@ -59,4 +59,21 @@ export class MailController {
         .json({ error: "Erreur lors de l'analyse des emails" });
     }
   };
+
+  getFullMessages = async (req: Request, res: Response) => {
+    const { userId } = req.params;
+
+    try {
+      const response = await this.gmailService.listFullMessages(
+        "user_1753630455830"
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log("Error fetching full messages:", error);
+
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des messages" });
+    }
+  };
 }

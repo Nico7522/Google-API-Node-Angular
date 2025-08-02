@@ -129,4 +129,53 @@ export class GmailService implements GmailRepository {
       nextPageToken: response.data.nextPageToken || null,
     };
   }
+
+  async listFullMessages(userId: string) {
+    const tokens = getTokens()[userId];
+    if (!tokens) {
+      throw new Error("User not authenticated");
+    }
+    oauth2Client.setCredentials(tokens);
+    try {
+      // Get the last 10 emails
+      const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+      const res = await gmail.users.messages.list({
+        userId: "me",
+        maxResults: 10,
+      });
+      const messages = res.data.messages || [];
+
+      // Get the email details calling the Gmail API
+      const emails = await Promise.all(
+        messages.map(async (message) => {
+          const mailDetails = await gmail.users.messages.get({
+            userId: "me",
+            id: message.id || "",
+            format: "full",
+          });
+
+          return mailDetails;
+        })
+      );
+
+      // Clean the email content and return the subjet, body (without HTML tags and CSS), and mailId
+      const cleanedMails = [];
+      for (const email of emails) {
+        const body = cleanEmailContent(email.data);
+        const mailId = email.data.id ?? "";
+        const subject =
+          email?.data?.payload?.headers?.find((h) => h.name === "Subject")
+            ?.value ?? "";
+        cleanedMails.push({
+          mailId,
+          subject,
+          body,
+        });
+      }
+
+      return cleanedMails.splice(0, 2) || [];
+    } catch (error) {
+      return [];
+    }
+  }
 }

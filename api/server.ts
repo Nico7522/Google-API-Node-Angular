@@ -4,9 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./config/swaggerConfig";
-import authRoutes from "./routes/authRoutes";
-import gmailRoutes from "./routes/gmailRoutes";
-import calendarRoutes from "./routes/calendarRoutes";
+
 import configureDI from "./config/container";
 import configureRouter from "./config/configure-router";
 dotenv.config();

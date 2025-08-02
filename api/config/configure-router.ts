@@ -8,7 +8,9 @@ export default function configureRouter(
   const gmailController = diContainer.get("MailController");
   const calendarController = diContainer.get("CalendarController");
   const authController = diContainer.get("AuthController");
-
+  app
+    .route("/api/gmail/users/:userId/messages/full")
+    .get(gmailController.getFullMessages.bind(gmailController));
   /**
    * @swagger
    * /api/gmail/users/{userId}/messages:
